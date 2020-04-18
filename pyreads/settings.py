@@ -76,7 +76,6 @@ WSGI_APPLICATION = 'pyreads.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'HOST': '127.0.0.1',
         'OPTIONS': {
             'read_default_file': '/etc/mysql/my.cnf',
         },
