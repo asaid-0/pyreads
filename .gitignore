@@ -1,0 +1,8 @@
+env
+*.DS_Store
+*.pyc
+pycache
+pyreads/env
+pyreads/*.DS_Store
+pyreads/*.pyc
+pyreads/pycache
