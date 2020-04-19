@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.http import HttpResponse
 from .models import User
 from .forms import UserForm
 from django.shortcuts import get_object_or_404, redirect
@@ -21,3 +22,15 @@ def edit_profile(request, id):
         form = UserForm(instance=user)
 
     return render(request, 'users/edit_profile.html', {'form': form})
+
+def get_projects(request, id):
+    user = User.objects.get(id = id)
+    projects =  user.project_set.all()
+    context = {'projects': projects}
+    return render(request, 'users/user_projects.html', context)
+
+def get_donations(request, id):
+    user = User.objects.get(id = id)
+    donations =  user.project_donations.all()
+    context = {'donations': donations}
+    return render(request, 'users/user_donations.html', context)

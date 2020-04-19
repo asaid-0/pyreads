@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %} Profile {% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <h1> Your Donations</h1>
+<ul> 
+    {% for donated_project in donations %}
+    <li>
+        {{donated_project.title}}
+    </li>
+    {% endfor %}
+</ul>
+
+</div>
+
+{% endblock %}
