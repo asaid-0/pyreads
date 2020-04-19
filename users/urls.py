@@ -1,9 +1,5 @@
 from django.urls import path
-<<<<<<< HEAD
-from .views import show_profile, edit_profile, get_projects, get_donations
-=======
-from .views import show_profile, edit_profile, home
->>>>>>> e7053141fd90d146fb92140b787597b87cadd9ee
+from .views import show_profile, edit_profile, get_projects, get_donations, home
 
 urlpatterns = [
     path('', home, name='home'),
