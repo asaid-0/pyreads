@@ -5,6 +5,9 @@ from .forms import UserForm
 from django.shortcuts import get_object_or_404, redirect
 # Create your views here.
 
+def home(request):
+    return render(request, 'users/home.html')
+
 def show_profile(request, id):
     user = User.objects.get(id = id)
     context = {'user': user}
