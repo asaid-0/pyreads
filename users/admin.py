@@ -9,4 +9,6 @@ admin.site.register(Comment)
 admin.site.register(Rate)
 admin.site.register(Project_pictures)
 admin.site.register(Project_tags)
+admin.site.register(Donation)
+
 

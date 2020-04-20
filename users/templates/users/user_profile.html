@@ -1,78 +1,62 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
-        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-        crossorigin="anonymous"></script>
-    <title>Profile</title>
-</head>
+{% block title %} Profile {% endblock %}
 
-<body>
-    <div class="container">
+{% block content %}
 
-        <div class="row my-2">
-            <div class="col-lg-8 order-lg-2">
-                <ul class="nav nav-tabs">
-                    <li class="nav-item">
-                        <a href="" data-target="#profile" data-toggle="tab" class="nav-link active">Profile</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="" data-target="#messages" data-toggle="tab" class="nav-link">Contact info</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="" data-target="#edit" data-toggle="tab" class="nav-link">other info</a>
-                    </li>
-                </ul>
-                <div class="tab-content py-4">
-                    <div class="tab-pane active" id="profile">
-                        <a href="{% url 'edit_profile' user.id%}" class="top-menu"><span
-                                class="glyphicon glyphicon-plus"></span>Edit profile</a>
-                        <h4 class="mb-3">{{ user.first_name }} {{ user.last_name }}</h5>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <h5>Username: {{user.username}}</h6>
+<div class="container">
+
+    <div class="row my-2">
+        <div class="col-lg-8 order-lg-2">
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a href="" data-target="#profile" data-toggle="tab" class="nav-link active">Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'edit_profile' user.id%}" data-target="#messages" data-toggle="tab" class="nav-link">Edit profile</a>
+                </li>
+            </ul>
+            <div class="tab-content py-4">
+                <div class="tab-pane active" id="profile">
+                    <h4 class="mb-3">{{ user.first_name }} {{ user.last_name }}</h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5>Username: {{user.username}}</h6>
+                                    <br>
+                                    <h5>E-mail: {{ user.email }}</h6>
                                         <br>
-                                        <h5>E-mail: {{ user.email }}</h6>
+                                        <h5>Birth date: {{ user.birth_date }}</h6>
                                             <br>
-                                            <h5>Birth date: {{ user.birth_date }}</h6>
-                                                <br>
-                                                <h5>Country: {{ user.country }}</h6>
-                                </div>
-                                <div class="col-md-12">
-                                    <h5 class="mt-2"><span class="fa fa-clock-o ion-clock float-right"></span> Contact
-                                        Info:</h5>
-                                    <table class="table table-sm table-hover table-striped">
-                                        <tbody>
-                                            <tr>
-                                                <td>
-                                                    <strong>Phone: </strong> {{user.mobile_phone}}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <strong>Facebook: </strong> {{ user.facebook_account }}
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+                                            <h5>Country: {{ user.country }}</h6>
                             </div>
-                            <!--/row-->
-                    </div>
+                            <div class="col-md-12">
+                                <h5 class="mt-2"><span class="fa fa-clock-o ion-clock float-right"></span> Contact
+                                    Info:</h5>
+                                <table class="table table-sm table-hover table-striped">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <strong>Phone: </strong> {{user.mobile_phone}}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <strong>Facebook: </strong> {{ user.facebook_account }}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <!--/row-->
                 </div>
             </div>
-            <div class="col-lg-4 order-lg-1 text-center">
-                <img src="../..{{ user.profile_picture.url }}" class="mx-auto img-fluid img-circle d-block"
-                    alt="avatar">
+        </div>
+        <div class="col-lg-4 order-lg-1 text-center">
+            <img src="../..{{ user.profile_picture.url }}" class="mx-auto img-fluid img-circle d-block" alt="avatar">
 
-            </div>
         </div>
     </div>
-</body>
+</div>
 
-</html>
+{% endblock %}
