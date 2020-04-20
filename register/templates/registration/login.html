@@ -6,7 +6,7 @@
     {% if form.errors %}
     <p>Your username and password didn't match. Please try again.</p>
   {% endif %}
-  
+<!--   
   {% if next %}
     {% if user.is_authenticated %}
       <p>Your account doesn't have access to this page. To proceed,
@@ -14,8 +14,13 @@
     {% else %}
       <p>Please login to see this page.</p>
     {% endif %}
-  {% endif %}
+  {% endif %} -->
   
+  {% if messages %}
+  {% for message in messages %}
+      <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}" role="alert">{{ message }}</div>
+  {% endfor %}
+  {% endif %}  
 
   {% load crispy_forms_tags %}
 

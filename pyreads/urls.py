@@ -18,7 +18,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.contrib.staticfiles.urls import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-from register.views import register
+from register.views import register, activate
 from users.views import home
 
 urlpatterns = [
@@ -26,7 +26,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('home/', include('users.urls')),
     path('', include('django.contrib.auth.urls')),
-    path('register/',register,name='register')
+    path('register/',register,name='register'),
+    path('activate/<slug:uidb64>/<slug:token>/', activate, name='activate'),
 ]
 
 urlpatterns += staticfiles_urlpatterns()

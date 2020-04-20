@@ -12,6 +12,7 @@ class User(AbstractUser):
     project_donations = models.ManyToManyField('Project', through='Donation',related_name='donations', blank=True)
     comment_reports = models.ManyToManyField('Comment', related_name='reports', blank=True)
     email = models.EmailField(('email address'), unique=True)
+    signup_confirmation = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
