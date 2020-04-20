@@ -3,6 +3,8 @@ from django.http import HttpResponse
 from .models import User , Category
 from .forms import UserForm
 from django.shortcuts import get_object_or_404, redirect
+from django.contrib.auth import get_user_model
+
 # Create your views here.
 
 def home(request):
