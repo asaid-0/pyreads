@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser):
     mobile_phone = models.CharField(max_length=15, null=True, blank=True)
-    birth_date = models.DateField(null=True)
+    birth_date = models.DateField(null=True, blank=True)
     country = models.CharField(max_length=40, null=True, blank=True)
     facebook_account = models.URLField(null=True, blank=True)
     profile_picture = models.ImageField(upload_to = 'images/', default='')
