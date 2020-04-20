@@ -1,9 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-
+from  django.core.validators import RegexValidator
 class User(AbstractUser):
-    mobile_phone = models.CharField(max_length=15, null=True, blank=True)
-    birth_date = models.DateField(null=True)
+    mobile_phone = models.CharField(max_length=15,validators=[RegexValidator('^0(10|11|12|15)\d{8}$',message="please enter egyptian mobile phone: like= 01012345678")])
+    birth_date = models.DateField(null=True, blank=True)
     country = models.CharField(max_length=40, null=True, blank=True)
     facebook_account = models.URLField(null=True, blank=True)
     profile_picture = models.ImageField(upload_to = 'images/', default='')
@@ -11,7 +11,12 @@ class User(AbstractUser):
     project_rates = models.ManyToManyField('Project', through='Rate', related_name='rates', blank=True)
     project_donations = models.ManyToManyField('Project', through='Donation',related_name='donations', blank=True)
     comment_reports = models.ManyToManyField('Comment', related_name='reports', blank=True)
-
+    email = models.EmailField(('email address'), unique=True)
+    signup_confirmation = models.BooleanField(default=False)
+    first_name = models.CharField(max_length=128)
+    last_name = models.CharField(max_length=128)
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
 class Category(models.Model):
     name = models.CharField(max_length=100, null=True)
 

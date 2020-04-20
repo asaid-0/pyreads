@@ -6,13 +6,18 @@
 
 <div class="container">
     <h1> Your Donations</h1>
-<ul> 
-    {% for donated_project in donations %}
-    <li>
-        {{donated_project.title}}
-    </li>
-    {% endfor %}
-</ul>
+
+    
+    <ul>
+        {% for donated_project in donations %}
+        <li>
+            {{donated_project.title}}
+        </li>
+        {% empty %}
+            <h2>Sorry, you don't have donated projects.</h2>
+        {% endfor %}
+    </ul>
+
 
 </div>
 
