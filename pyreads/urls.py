@@ -18,10 +18,13 @@ from django.urls import path, include
 from django.conf import settings
 from django.contrib.staticfiles.urls import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from register.views import register
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('home/', include('users.urls'))
+    path('home/', include('users.urls')),
+    path('', include('django.contrib.auth.urls')),
+    path('register/',register,name='register')
 ]
 
 urlpatterns += staticfiles_urlpatterns()

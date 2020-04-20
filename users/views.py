@@ -2,6 +2,8 @@ from django.shortcuts import render
 from .models import User
 from .forms import UserForm
 from django.shortcuts import get_object_or_404, redirect
+from django.contrib.auth import get_user_model
+
 # Create your views here.
 
 def show_profile(request, id):

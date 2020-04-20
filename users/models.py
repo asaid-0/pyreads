@@ -11,7 +11,10 @@ class User(AbstractUser):
     project_rates = models.ManyToManyField('Project', through='Rate', related_name='rates', blank=True)
     project_donations = models.ManyToManyField('Project', through='Donation',related_name='donations', blank=True)
     comment_reports = models.ManyToManyField('Comment', related_name='reports', blank=True)
+    email = models.EmailField(('email address'), unique=True)
 
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
 class Category(models.Model):
     name = models.CharField(max_length=100, null=True)
 
