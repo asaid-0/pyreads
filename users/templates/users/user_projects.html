@@ -11,6 +11,13 @@
     <li>
         {{project.title}}
     </li>
+    <!-- {% for project_pics in project.project_projects_set.all %}
+        <li>
+            {{  project_pics  }}
+        </li>
+    {% endfor %} -->
+    {% empty %}
+            <h2>Sorry, you don't have projects.</h2>
     {% endfor %}
 </ul>
 

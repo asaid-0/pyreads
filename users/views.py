@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import User
+from .models import User , Category
 from .forms import UserForm
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth import get_user_model
@@ -8,7 +8,12 @@ from django.contrib.auth import get_user_model
 # Create your views here.
 
 def home(request):
-    return render(request, 'users/home.html')
+    categories = Category.objects.all()
+
+
+
+    context = {'categories': categories}
+    return render(request, 'users/home.html', context )
 
 def show_profile(request, id):
     user = User.objects.get(id = id)
@@ -31,6 +36,7 @@ def edit_profile(request, id):
 def get_projects(request, id):
     user = User.objects.get(id = id)
     projects =  user.project_set.all()
+    
     context = {'projects': projects}
     return render(request, 'users/user_projects.html', context)
 
@@ -39,3 +45,9 @@ def get_donations(request, id):
     donations =  user.project_donations.all()
     context = {'donations': donations}
     return render(request, 'users/user_donations.html', context)
+
+def get_category_projects(request , id):
+    category = Category.objects.get(id = id)
+    projects = category.project_set.all()
+    context = {'projects': projects , 'category': category}
+    return render(request, 'users/category_projects.html', context )
