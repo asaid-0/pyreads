@@ -15,23 +15,30 @@ def home(request):
     context = {'categories': categories}
     return render(request, 'users/home.html', context )
 
-def show_profile(request, id):
-    user = User.objects.get(id = id)
-    context = {'user': user}
-    return render(request, 'users/user_profile.html', context)
-
-def edit_profile(request, id):
-    user = get_object_or_404(User, id=id)
-    if request.method == 'POST' :
-        form = UserForm(request.POST, instance=user)
-        if form.is_valid:
-            user = form.save(commit=False)
-            user.save()
-            return redirect('profile', id=user.id)
+def show_profile(request):
+    if request.user.is_authenticated:
+        current_user = request.user
+        user = User.objects.get(id = current_user.id)
+        context = {'user': user}
+        return render(request, 'users/user_profile.html', context)
     else:
-        form = UserForm(instance=user)
+        return redirect('home')
 
-    return render(request, 'users/edit_profile.html', {'form': form})
+def edit_profile(request):
+    if request.user.is_authenticated:
+        current_user = request.user
+        if request.method == 'POST' :
+            form = UserForm(request.POST, request.FILES ,instance=current_user)
+            if form.is_valid:
+                current_user = form.save(commit=False)
+                current_user.save()
+                return redirect('profile')
+        else:
+            form = UserForm(instance=current_user)
+
+        return render(request, 'users/edit_profile.html', {'form': form})
+    else:
+        return redirect('home')
 
 def get_projects(request, id):
     user = User.objects.get(id = id)
