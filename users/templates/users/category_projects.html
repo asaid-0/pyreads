@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %} Home {% endblock %}
+
+{% block content %}
+    <h1>HOME</h1>
+
+
+    <h2>{{ category.name }} Projects</h2>
+    
+    <ul> 
+        {% for project in projects %}
+        <li>
+            {{project.title}}
+        </li>
+        {% empty %}
+                <h2>Sorry, you don't have projects in this category.</h2>
+        {% endfor %}
+    </ul>
+
+
+{% endblock %}

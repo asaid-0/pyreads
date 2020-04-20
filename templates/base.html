@@ -29,10 +29,10 @@
           <a class="nav-link" href="{% url 'profile' 2 %}">My profile</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="">My projects</a>
+          <a class="nav-link" href="{% url 'user_projects' 1 %}">My projects</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="">My donations</a>
+          <a class="nav-link" href="{% url 'user_donations' 1 %}">My donations</a>
         </li>
       </ul>
       <form class="form-inline my-2 my-lg-0">

@@ -4,4 +4,15 @@
 
 {% block content %}
     <h1>HOME</h1>
+
+
+    <h3>Projects Categories</h3>
+    {% for category in categories %}
+        <a href="{% url 'category_projects' category.id %}"> {{ category.name }} </a>
+    {% empty %}
+        <h2>Sorry, you don't have projects.</h2>
+    {% endfor %}
+
+
+
 {% endblock %}
