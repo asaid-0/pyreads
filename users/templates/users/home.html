@@ -3,35 +3,34 @@
 {% block title %} Home {% endblock %}
 
 {% block content %}
-    {% if messages %}
-    {% for message in messages %}
-        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}" role="alert">{{ message }}</div>
-    {% endfor %}
-    {% endif %}  
-    <h1>HOME</h1>
+{% if messages %}
+{% for message in messages %}
+<div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}" role="alert">{{ message }}</div>
+{% endfor %}
+{% endif %}
+<h1>HOME</h1>
 
+<h3>Categories</h3>
+{% for category in categories %}
+<a href="{% url 'category_projects' category.id %}"> {{ category.name }} </a>
+{% empty %}
+<h2>Sorry, There are no Categories yet.</h2>
+{% endfor %}
 
-    <h3>Categories</h3>
-    {% for category in categories %}
-        <a href="{% url 'category_projects' category.id %}"> {{ category.name }} </a>
-    {% empty %}
-        <h2>Sorry, There are no Categories yet.</h2>
-    {% endfor %}
-
-    <h3>Latest Projects</h3>
-    <ul> 
-        {% for project in projects %}
-        <li>
-            {{project.title}}
-        </li>
-        <!-- {% for project_pics in project.project_projects_set.all %}
+<h3>Latest Projects</h3>
+<ul>
+    {% for project in projects %}
+    <li>
+        {{project.title}}
+    </li>
+    <!-- {% for project_pics in project.project_projects_set.all %}
             <li>
                 {{  project_pics  }}
             </li>
         {% endfor %} -->
-        {% empty %}
-                <h2>Sorry, There are no projects yet.</h2>
-        {% endfor %}
-    </ul>
+    {% empty %}
+    <h2>Sorry, There are no projects yet.</h2>
+    {% endfor %}
+</ul>
 
 {% endblock %}

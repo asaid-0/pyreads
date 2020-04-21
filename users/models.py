@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from  django.core.validators import RegexValidator
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from taggit.managers import TaggableManager
 
 class CustomUserManager(BaseUserManager):
     def create_user(self ,email, password=None):
@@ -61,6 +62,7 @@ class Project(models.Model) :
     end_date = models.DateField(null=True, blank=True)
     category = models.ForeignKey('Category', null=True, on_delete=models.CASCADE)
     owner = models.ForeignKey('User', null=True, on_delete=models.CASCADE)
+    tags = TaggableManager()
 
     def __str__(self):
         return self.title
@@ -91,8 +93,3 @@ class Report(models.Model):
 class Project_pictures(models.Model):
     project = models.ForeignKey('Project', null=True, on_delete=models.CASCADE)
     picture = models.ImageField(upload_to = 'images/', default='')
-
-class Project_tags(models.Model):
-    project = models.ForeignKey('Project', null=True, on_delete=models.CASCADE)
-    tag = models.CharField(max_length=50)
-

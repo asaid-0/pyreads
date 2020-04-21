@@ -18,6 +18,7 @@ def add_project(request):
                 new_project = form.save(commit=False)
                 new_project.owner_id = current_user.id
                 new_project.save()
+                form.save_m2m()
                 for file in request.FILES.getlist('picture'):
                     picture = Project_pictures(
                         project = new_project,
