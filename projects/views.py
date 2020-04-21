@@ -49,7 +49,6 @@ def view_project(request, id):
     return render(request, "projects/view.html", context)
 
 
-<<<<<<< HEAD
 def delete_project(request , id):
     if request.user.is_authenticated:
         if request.method == "POST":
@@ -65,8 +64,6 @@ def delete_project(request , id):
 
 
 
-=======
->>>>>>> 331658d63d29015877279829db768abd245badb0
 def add_comment(request, id):
     project = Project.objects.filter(id=int(id))
     if not (project.exists() and request.user.is_authenticated):
@@ -82,7 +79,6 @@ def add_comment(request, id):
     create_comment.save()
     return redirect("view_project", id=project.first().id)
 
-<<<<<<< HEAD
 
 
 def get_category_projects(request, id):
@@ -90,6 +86,3 @@ def get_category_projects(request, id):
     projects = category.project_set.all()
     context = {"projects": projects, "category": category}
     return render(request, "projects/category_projects.html", context)
-=======
-    # return render(request, "users/user_profile.html", context)
->>>>>>> 331658d63d29015877279829db768abd245badb0
