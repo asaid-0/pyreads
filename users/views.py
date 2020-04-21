@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import User, Category
+from .models import User, Category, Project
 from .forms import UserForm
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth import get_user_model
@@ -10,8 +10,8 @@ from django.contrib.auth import get_user_model
 
 def home(request):
     categories = Category.objects.all()
-
-    context = {"categories": categories}
+    projects =  Project.objects.all().order_by('-id')[:5]
+    context = {"categories": categories , "projects": projects}
     return render(request, "users/home.html", context)
 
 
@@ -54,19 +54,26 @@ def delete_account(request):
         return redirect("home")
 
 
-def get_projects(request, id):
-    user = User.objects.get(id=id)
-    projects = user.project_set.all()
+def get_projects(request):
+    if request.user.is_authenticated:
+        current_user = request.user
+        user = User.objects.get(id= current_user.id )
+        projects = user.project_set.all()
+        context = {"projects": projects}
+        return render(request, "users/user_projects.html", context)
+    else:
+        return redirect("home")
 
-    context = {"projects": projects}
-    return render(request, "users/user_projects.html", context)
 
-
-def get_donations(request, id):
-    user = User.objects.get(id=id)
-    donations = user.project_donations.all()
-    context = {"donations": donations}
-    return render(request, "users/user_donations.html", context)
+def get_donations(request):
+    if request.user.is_authenticated:
+        current_user = request.user
+        user = User.objects.get(id= current_user.id )
+        donations = user.project_donations.all()
+        context = {"donations": donations}
+        return render(request, "users/user_donations.html", context)
+    else:
+        return redirect("home")
 
 
 def get_category_projects(request, id):
