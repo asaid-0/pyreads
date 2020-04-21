@@ -14,7 +14,7 @@ def add_project(request):
         if request.method == "POST":
             form = AddProjectForm(request.POST)
             image_form = ImageForm(request.POST, request.FILES)
-            if form.is_valid and image_form.is_valid:
+            if form.is_valid() and image_form.is_valid():
                 new_project = form.save(commit=False)
                 new_project.owner_id = current_user.id
                 new_project.save()

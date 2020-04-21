@@ -2,6 +2,9 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from  django.core.validators import RegexValidator
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
+from datetime import datetime
 
 class CustomUserManager(BaseUserManager):
     def create_user(self ,email, password=None):
@@ -61,9 +64,19 @@ class Project(models.Model) :
     end_date = models.DateField(null=True, blank=True)
     category = models.ForeignKey('Category', null=True, on_delete=models.CASCADE)
     owner = models.ForeignKey('User', null=True, on_delete=models.CASCADE)
+    is_featured= models.BooleanField(null=True,blank=True)
+    featuring_date= models.DateTimeField(null=True,blank=True)
 
     def __str__(self):
         return self.title
+
+#a trigger to auto update featuring date when the project is featured
+@receiver(pre_save, sender=Project)
+def update_project_on_save(sender, instance, **kwargs):
+    if instance.id:
+        old_project = Project.objects.get(pk=instance.id)
+        if instance.is_featured and not old_project.is_featured:
+            instance.featuring_date= datetime.now()
 
 class Comment(models.Model):
     content = models.CharField(max_length=200, null=True)
