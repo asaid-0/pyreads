@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from .forms import AddProjectForm, ImageForm
 from django.shortcuts import redirect
-from users.models import Project, Comment, Project_pictures
+from django.db.models import Sum
+from users.models import Project, Comment, Category, Donation, Project_pictures
 from django.http import HttpResponse
 
 
@@ -14,7 +15,7 @@ def add_project(request):
         if request.method == "POST":
             form = AddProjectForm(request.POST)
             image_form = ImageForm(request.POST, request.FILES)
-            if form.is_valid and image_form.is_valid:
+            if form.is_valid() and image_form.is_valid():
                 new_project = form.save(commit=False)
                 new_project.owner_id = current_user.id
                 new_project.save()
@@ -41,11 +42,27 @@ def add_project(request):
 def view_project(request, id):
     project = Project.objects.filter(id=int(id))
     if project.exists():
-        context = {"project": project.first()}
+        total_amount_set = Donation.objects.values('project_id').annotate(total_amount=Sum('amount'))
+        context = {"project": project.first() , "total_amount_set": total_amount_set }
     else:
         context = {"project": None}
 
     return render(request, "projects/view.html", context)
+
+
+def delete_project(request , id):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            project = Project.objects.get(id = id)
+            project.delete()
+            return redirect("user_projects")
+        else:
+            return redirect("user_projects")
+    else:
+        return redirect("home")
+
+
+
 
 
 def add_comment(request, id):
@@ -63,4 +80,11 @@ def add_comment(request, id):
     create_comment.save()
     return redirect("view_project", id=project.first().id)
 
+
+
+def get_category_projects(request, id):
+    category = Category.objects.get(id=id)
+    projects = category.project_set.all()
+    context = {"projects": projects, "category": category}
+    return render(request, "projects/category_projects.html", context)
     # return render(request, "users/user_profile.html", context)

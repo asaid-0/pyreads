@@ -17,13 +17,13 @@
 <h2>Sorry, There are no Categories yet.</h2>
 {% endfor %}
 
-<h3>Latest Projects</h3>
-<ul>
-    {% for project in projects %}
-    <li>
-        {{project.title}}
-    </li>
-    <!-- {% for project_pics in project.project_projects_set.all %}
+    <h3>Latest Projects</h3>
+    <ul> 
+        {% for project in latest_projects %}
+        <li>
+            {{project.title}}
+        </li>
+        <!-- {% for project_pics in project.project_projects_set.all %}
             <li>
                 {{  project_pics  }}
             </li>
@@ -32,5 +32,26 @@
     <h2>Sorry, There are no projects yet.</h2>
     {% endfor %}
 </ul>
+
+    <h3>Highest Rated Projects</h3>
+    <ul>
+        {% for high_rated_project in high_rated_set %} 
+            {% for project in projects %}
+                {% if project.id == high_rated_project.project_id %}
+                    <li>
+                        {{project.title}} Rate: {{high_rated_project.sum_rate}}
+                    </li>
+                {% endif %}
+            {% endfor %}
+        
+        <!-- {% for project_pics in project.project_projects_set.all %}
+            <li>
+                {{  project_pics  }}
+            </li>
+        {% endfor %} -->
+        {% empty %}
+                <h2>Sorry, There are no projects yet.</h2>
+        {% endfor %}
+    </ul>
 
 {% endblock %}
