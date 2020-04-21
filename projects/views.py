@@ -16,7 +16,7 @@ def add_project(request):
                 new_project = form.save(commit=False)
                 new_project.owner_id = current_user.id
                 new_project.save()
-                return redirect("user_projects", current_user.id)
+                return redirect("user_projects")
         else:
             form = AddProjectForm()
 
