@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from .forms import AddProjectForm
 from django.shortcuts import redirect
+from users.models import Project
 
 # Create your views here.
 
@@ -20,3 +21,14 @@ def add_project(request):
         return render(request, "projects/add_project.html", {"form": form})
     else:
         return redirect("home")
+
+
+def view_project(request, id):
+    project = Project.objects.filter(id = int(id))
+    if project.exists():
+        context = {"project": project.first()}
+    else:
+        context = {"project": None}
+        
+    return render(request, "projects/view.html", context)
+    
