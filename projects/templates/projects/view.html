@@ -4,6 +4,7 @@
 
 {% block content %}
 {% load crispy_forms_tags %}
+{% load my_custom_filters %}
 <div class="container">
 
 
@@ -18,6 +19,16 @@
             <p class="card-text"><a href="">{{ project.end_date }}</a></p>
             <p class="card-text"><a
                     href="../category/{{ project.category.id }}/projects">{{ project.category.name }}</a></p>
+            
+            {% for total_amount_project in total_amount_set %} 
+                {% if  total_amount_project.total_amount  <   project.total_target|quarter   %}
+                    <form action="{% url 'delete_project' project.id %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Remove</button>
+                    </form> 
+                {% endif %}
+            {% endfor %}
+
 
 
         </div>
@@ -47,9 +58,6 @@
 
 
         {% endfor %}
-
-
-
 
     </div>
     {% else %}
