@@ -11,7 +11,7 @@
     <ul> 
         {% for project in projects %}
         <li>
-            {{project.title}}
+            <a href="../../project/{{ project.id }}">{{project.title}}</a>
         </li>
         {% empty %}
                 <h2>Sorry, you don't have projects in this category.</h2>

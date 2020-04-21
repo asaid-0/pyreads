@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %} Project {% endblock %}
+
+{% block content %}
+{% load crispy_forms_tags %}
+<div class="container">
+
+
+    {% if project %}
+    <div class="card bg-dark text-white">
+        <img src="https://source.unsplash.com/800x300" height="300px" width="auto" class="card-img" alt="img">
+        <div class="text-secondary card-img-overlay">
+            <h5 class="card-title">{{ project.title }}</h5>
+            <p class="card-text"><a href="">{{ project.details }}</a></p>
+            <p class="card-text"><a href="">{{ project.total_target }}</a></p>
+            <p class="card-text"><a href="">{{ project.start_date }}</a></p>
+            <p class="card-text"><a href="">{{ project.end_date }}</a></p>
+            <p class="card-text"><a
+                    href="../category/{{ project.category.id }}/projects">{{ project.category.name }}</a></p>
+
+
+        </div>
+
+        <div class="p-2 text-light bg-secondary">comments</div>
+        <form style="position: relative;" action="./{{ project.id }}/comment" accept-charset="UTF-8" method="post">
+            {% csrf_token %}
+            {{form|crispy}}
+            <div class="text-light bg-secondary">
+                <input placeholder="New comment...." class="form-control" style="border: none; border-radius: 0"
+                    type="text" name="content" id="content">
+            </div>
+        </form>
+
+        {% for comment in project.comment_set.all %}
+
+        <div style="position: relative" class="p-3">
+            <span>
+                {{ comment }}
+            </span>
+            <span style="float: right">
+                By: {{ comment.user }}
+                <a class="btn btn-danger ml-1" href="/comments/1/delete">x</a>
+            </span>
+
+        </div>
+
+
+        {% endfor %}
+
+
+
+
+    </div>
+    {% else %}
+    <h5 class="text-secondary"> no project found matching your id </h5>
+    {% endif %}
+
+
+
+</div>
+
+{% endblock %}
