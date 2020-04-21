@@ -10,7 +10,8 @@
 <ul> 
     {% for project in projects %}
     <li>
-        <a href="../../project/{{ project.id }}">{{project.title}}</a>
+        <!-- <a href="../../project/{{ project.id }}">{{project.title}}</a> --> 
+        <a href="{% url 'view_project' project.id %}">{{project.title}}</a>
     </li>
     <!-- {% for project_pics in project.project_projects_set.all %}
         <li>
