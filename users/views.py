@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from .models import User, Category, Project
 from .forms import UserForm
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import redirect
 from django.contrib.auth import get_user_model
 
 # Create your views here.

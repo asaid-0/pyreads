@@ -5,11 +5,12 @@
 {% block content %}
 
 <div class="container">
+    <a href="{% url 'add_project' %}" class="btn btn-info" role="button">Add project</a>
     <h1> Your Projects</h1>
 <ul> 
     {% for project in projects %}
     <li>
-        {{project.title}}
+        <a href="../../project/{{ project.id }}">{{project.title}}</a>
     </li>
     <!-- {% for project_pics in project.project_projects_set.all %}
         <li>

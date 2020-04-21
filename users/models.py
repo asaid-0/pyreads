@@ -17,6 +17,9 @@ class User(AbstractUser):
     last_name = models.CharField(max_length=128)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
+
 class Category(models.Model):
     name = models.CharField(max_length=100, null=True)
 
@@ -39,6 +42,9 @@ class Comment(models.Model):
     content = models.CharField(max_length=200, null=True)
     user = models.ForeignKey('User', null=True, on_delete=models.CASCADE)
     project = models.ForeignKey('Project', null=True, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return self.content
 
 class Rate(models.Model):
     user= models.ForeignKey('User', null=True, on_delete=models.CASCADE)
