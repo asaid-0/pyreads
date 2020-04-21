@@ -87,4 +87,3 @@ def get_category_projects(request, id):
     projects = category.project_set.all()
     context = {"projects": projects, "category": category}
     return render(request, "projects/category_projects.html", context)
-    # return render(request, "users/user_profile.html", context)
