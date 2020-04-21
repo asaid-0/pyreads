@@ -46,6 +46,7 @@ def add_comment(request, id):
     user = request.user
     create_comment = Comment(content=request.POST.get('content'), user=user, project=project.first())
     create_comment.save()
-    return HttpResponse(f"User: {str(type(user))}")
+    return redirect("view_project", id=project.first().id)
+
     
     # return render(request, "users/user_profile.html", context)
