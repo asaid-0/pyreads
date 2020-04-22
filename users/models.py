@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from  django.core.validators import RegexValidator
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from taggit.managers import TaggableManager
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from datetime import datetime
@@ -81,6 +82,7 @@ class Project(models.Model) :
     end_date = models.DateField(null=True, blank=True)
     category = models.ForeignKey('Category', null=True, on_delete=models.CASCADE)
     owner = models.ForeignKey('User', null=True, on_delete=models.CASCADE)
+    tags = TaggableManager()
     is_featured= models.BooleanField(null=True,blank=True)
     featuring_date= models.DateTimeField(null=True,blank=True)
 
@@ -121,8 +123,3 @@ class Report(models.Model):
 class Project_pictures(models.Model):
     project = models.ForeignKey('Project', null=True, on_delete=models.CASCADE)
     picture = models.ImageField(upload_to = 'images/', default='')
-
-class Project_tags(models.Model):
-    project = models.ForeignKey('Project', null=True, on_delete=models.CASCADE)
-    tag = models.CharField(max_length=50)
-
