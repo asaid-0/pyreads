@@ -34,13 +34,9 @@
         </div>
 
         <div class="p-2 text-light bg-secondary">comments</div>
-        <form style="position: relative;" action="./{{ project.id }}/comment" accept-charset="UTF-8" method="post">
+        <form style="position: relative;" action="/home/project/{{ project.id }}/comment" accept-charset="UTF-8" method="post">
             {% csrf_token %}
             {{form|crispy}}
-            <div class="text-light bg-secondary">
-                <input placeholder="New comment...." class="form-control" style="border: none; border-radius: 0"
-                    type="text" name="content" id="content">
-            </div>
         </form>
 
         {% for comment in project.comment_set.all %}

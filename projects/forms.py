@@ -1,5 +1,5 @@
 from django import forms
-from users.models import Project, Project_pictures
+from users.models import Project, Project_pictures, Comment
 from django.utils.translation import ugettext_lazy as _
 
 
@@ -28,4 +28,14 @@ class ImageForm(forms.ModelForm):
         labels = {"picture": "Images"}
         widgets = {
             "picture": forms.ClearableFileInput(attrs={"multiple": True}),
+        }
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ("content",)
+        labels = {"content": ''}
+        widgets = {
+            "content": forms.TextInput(attrs={"class": "form-control", "style": "border: none; border-radius: 0", "placeholder": 'New Comment....'}),
         }

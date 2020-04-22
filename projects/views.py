@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .forms import AddProjectForm, ImageForm
+from .forms import AddProjectForm, ImageForm, CommentForm
 from django.shortcuts import redirect
 from django.db.models import Sum
 from users.models import Project, Comment, Category, Donation, Project_pictures
@@ -43,7 +43,7 @@ def view_project(request, id):
     project = Project.objects.filter(id=int(id))
     if project.exists():
         total_amount_set = Donation.objects.values('project_id').annotate(total_amount=Sum('amount'))
-        context = {"project": project.first() , "total_amount_set": total_amount_set }
+        context = {"project": project.first() , "total_amount_set": total_amount_set, "form": CommentForm() }
     else:
         context = {"project": None}
 
@@ -66,6 +66,7 @@ def delete_project(request , id):
 
 
 def add_comment(request, id):
+    form = CommentForm(request.POST)
     project = Project.objects.filter(id=int(id))
     if not (project.exists() and request.user.is_authenticated):
         return redirect("home")
@@ -73,12 +74,20 @@ def add_comment(request, id):
     if request.method.lower() == "get":
         return redirect("view_project", id=project.first().id)
 
-    user = request.user
-    create_comment = Comment(
-        content=request.POST.get("content"), user=user, project=project.first()
-    )
-    create_comment.save()
-    return redirect("view_project", id=project.first().id)
+    if form.is_valid():
+        user = request.user
+        create_comment = form.save(commit=False)
+        create_comment.user = user
+        create_comment.project = project.first()
+        create_comment.save()
+        return redirect("view_project", id=project.first().id)
+    else:
+        return render(
+            request,
+            f"projects/view.html",
+            {"project": project.first(), "form": form}
+        )
+
 
 
 
