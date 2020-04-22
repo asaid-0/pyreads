@@ -2,7 +2,7 @@ from django.shortcuts import render
 from .forms import AddProjectForm, ImageForm, CommentForm
 from django.shortcuts import redirect
 from django.db.models import Sum
-from users.models import Project, Comment, Category, Donation, Project_pictures
+from users.models import Project, Comment, Category, Donation, Project_pictures, User
 from django.http import HttpResponse
 
 
@@ -41,9 +41,16 @@ def add_project(request):
 
 def view_project(request, id):
     project = Project.objects.filter(id=int(id))
+
     if project.exists():
-        total_amount_set = Donation.objects.values('project_id').annotate(total_amount=Sum('amount'))
-        context = {"project": project.first() , "total_amount_set": total_amount_set, "form": CommentForm() }
+        user = User.objects.get(id=request.user.id)
+        user_projects = user.project_set.all()
+        for user_project in user_projects:
+            if user_project.id == int(id):
+                total_amount_set = Donation.objects.values('project_id').annotate(total_amount=Sum('amount'))
+                context = {"project": project.first() , "total_amount_set": total_amount_set, "form": CommentForm() }
+            else:
+                context = {"project": project.first() , "form": CommentForm() }
     else:
         context = {"project": None}
 
@@ -53,8 +60,12 @@ def view_project(request, id):
 def delete_project(request , id):
     if request.user.is_authenticated:
         if request.method == "POST":
-            project = Project.objects.get(id = id)
-            project.delete()
+            project = Project.objects.get(id =id)
+            total_amount_set = Donation.objects.values('project_id').annotate(total_amount=Sum('amount'))
+            for total_amount_project in total_amount_set:
+                if (total_amount_project['total_amount']  <  ( 0.25*project.total_target )) and (total_amount_project['project_id'] == project.id):
+                    project.delete()
+                    return redirect("user_projects") # with message deleted successfully
             return redirect("user_projects")
         else:
             return redirect("user_projects")
