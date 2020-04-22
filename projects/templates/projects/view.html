@@ -21,14 +21,12 @@
                     href="../category/{{ project.category.id }}/projects">{{ project.category.name }}</a></p>
             
                 
-            {% for total_amount_project in total_amount_set %} 
-                {% if  total_amount_project.total_amount  <   project.total_target|quarter and  total_amount_project.project_id == project.id  %}
+                {% if  project.total_target|quarter >  project_donations.total_amount or project_donations.total_amount == None %}
                     <form action="{% url 'delete_project' project.id %}" method="POST">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-danger">Remove</button>
                     </form> 
                 {% endif %}
-            {% endfor %}
 
         </div>
 
