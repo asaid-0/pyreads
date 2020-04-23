@@ -29,8 +29,9 @@
                     </form> 
                 {% endif %}
             {% endfor %}
-
+            <p class="card-text">{{ rate }}</p>
         </div>
+        
 
         <div class="p-2 text-light bg-secondary">comments</div>
         <form style="position: relative;" action="/home/project/{{ project.id }}/comment" accept-charset="UTF-8" method="post">

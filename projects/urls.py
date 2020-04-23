@@ -6,7 +6,6 @@ urlpatterns = [
     path('project/<int:id>', view_project, name='view_project'),
     path('project/<int:id>/delete', delete_project, name='delete_project'),
     path('project/<int:id>/comment', add_comment, name='add_comment'),
-
     path('category/<int:id>/projects', get_category_projects , name='category_projects')
 
 

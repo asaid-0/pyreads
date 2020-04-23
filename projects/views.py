@@ -2,8 +2,9 @@ from django.shortcuts import render
 from .forms import AddProjectForm, ImageForm, CommentForm
 from django.shortcuts import redirect
 from django.db.models import Sum
-from users.models import Project, Comment, Category, Donation, Project_pictures, User
+from users.models import Project, Comment, Category, Donation, Project_pictures, User, Rate
 from django.http import HttpResponse
+from .helpers import calc_rate
 
 
 # Create your views here.
@@ -48,7 +49,10 @@ def view_project(request, id):
         for user_project in user_projects:
             if user_project.id == int(id):
                 total_amount_set = Donation.objects.values('project_id').annotate(total_amount=Sum('amount'))
-                context = {"project": project.first() , "total_amount_set": total_amount_set, "form": CommentForm() }
+                rates = Rate.objects.filter(project_id=request.user.id)
+                rate = calc_rate(rates)
+                print(rate)
+                context = {"project": project.first() , "total_amount_set": total_amount_set, "rate": rate, "form": CommentForm() }
             else:
                 context = {"project": project.first() , "form": CommentForm() }
     else:
