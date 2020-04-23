@@ -1,6 +1,7 @@
 from django import forms
 from .models import User
 
+
 class UserForm(forms.ModelForm):
     class Meta:
         model = User
@@ -14,4 +15,6 @@ class UserForm(forms.ModelForm):
             "facebook_account",
             "profile_picture",
         )
-
+        widgets = {
+            "birth_date": forms.DateInput(attrs={'type': 'date'}),
+        }

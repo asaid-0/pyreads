@@ -40,7 +40,7 @@ def edit_profile(request):
         current_user = request.user
         if request.method == "POST":
             form = UserForm(request.POST, request.FILES, instance=current_user)
-            if form.is_valid:
+            if form.is_valid():
                 current_user = form.save(commit=False)
                 current_user.save()
                 return redirect("profile")
