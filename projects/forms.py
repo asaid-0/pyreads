@@ -1,5 +1,5 @@
 from django import forms
-from users.models import Project, Project_pictures, Comment
+from users.models import Project, Project_pictures, Comment, Donation
 from django.utils.translation import ugettext_lazy as _
 
 
@@ -51,6 +51,21 @@ class CommentForm(forms.ModelForm):
                     "class": "form-control",
                     "style": "border: none; border-radius: 0",
                     "placeholder": "New Comment....",
+                }
+            ),
+        }
+
+class DonateForm(forms.ModelForm):
+    class Meta:
+        model = Donation
+        fields = ("amount",)
+        labels = {"amount": ""}
+        widgets = {
+            "amount": forms.NumberInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "0",
+                    "id":"amount"
                 }
             ),
         }
