@@ -1,64 +1,150 @@
 {% extends 'base.html' %}
 
 {% block title %} Project {% endblock %}
+{% load static %}
 
 {% block content %}
 {% load crispy_forms_tags %}
 {% load my_custom_filters %}
-<div class="container">
 
+{% if project %}
 
-    {% if project %}
-    <div class="card bg-dark text-white">
-        <img src="https://source.unsplash.com/800x300" height="300px" width="auto" class="card-img" alt="img">
-        <div class="text-secondary card-img-overlay">
-            <h5 class="card-title">{{ project.title }}</h5>
-            <p class="card-text"><a href="">{{ project.details }}</a></p>
-            <p class="card-text"><a href="">{{ project.total_target }}</a></p>
-            <p class="card-text"><a href="">{{ project.start_date }}</a></p>
-            <p class="card-text"><a href="">{{ project.end_date }}</a></p>
-            <p class="card-text"><a
-                    href="../category/{{ project.category.id }}/projects">{{ project.category.name }}</a></p>
-            
-                
-                {% if  project.total_target|quarter >  project_donations.total_amount or project_donations.total_amount == None %}
-                    <form action="{% url 'delete_project' project.id %}" method="POST">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-danger">Remove</button>
-                    </form> 
-                {% endif %}
+<div id="image-slider" class="carousel slide" data-ride="carousel">
+    <ol class="carousel-indicators">
+        <li data-target="#image-slider" data-slide-to="0" class="active"></li>
+        {% for i in range %}
+        <li data-target="#image-slider" data-slide-to="{{i|add:'1'}}" class="active"></li>
+        {% endfor %}
+    </ol>
+    <div class="carousel-inner">
+        <div class="carousel-caption d-none d-md-block">
+            <h5>{{ project.title }}</h5>
+
+            <p>{{ project.total_target }}</p>
+
 
         </div>
 
-        <div class="p-2 text-light bg-secondary">comments</div>
-        <form style="position: relative;" action="/home/project/{{ project.id }}/comment" accept-charset="UTF-8" method="post">
-            {% csrf_token %}
-            {{form|crispy}}
-        </form>
-
-        {% for comment in project.comment_set.all %}
-
-        <div style="position: relative" class="p-3">
-            <span>
-                {{ comment }}
-            </span>
-            <span style="float: right">
-                By: {{ comment.user }}
-                <a class="btn btn-danger ml-1" href="/comments/1/delete">x</a>
-            </span>
-
+        <!-- Default image for showing project details -->
+        <div class="carousel-item active">
+            <img class="d-block w-100"
+                src="https://individuals.voya.com/sites/default/files/media/image/product-banner_fixed_income.png"
+                alt="Default Image"
+                height="300px" width="auto">
         </div>
 
+        <!-- Project Images -->
 
+        {% for pic in pics %}
+        <div class="carousel-item">
+            <img class="d-block w-100"
+                alt="not found" src={{pic.picture.url}}
+                alt="Project Image"
+                height="300px" width="auto">
+        </div>
         {% endfor %}
 
+
+
+
     </div>
-    {% else %}
-    <h5 class="text-secondary"> no project found matching your id </h5>
-    {% endif %}
+    <a class="carousel-control-prev" href="#image-slider" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#image-slider" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </a>
+</div>
+<div class="bg-dark text-white">
+    <div class="text-secondary">
+        <p class="card-text"><a href="">{{ project.details }}</a></p>
+        <p class="card-text"><a href="">{{ project.start_date }}</a></p>
+        <p class="card-text"><a href="">{{ project.end_date }}</a></p>
+        <p class="card-text">Current donations: <a href=""><span id="donations">{{ project_donations.total_amount }}</span></a></p>
+        <p class="card-text"><a href="../category/{{ project.category.id }}/projects">{{ project.category.name }}</a>
+        </p>
 
 
+        {% if  project.total_target|quarter >  project_donations.total_amount or project_donations.total_amount == None %}
+        <form action="{% url 'delete_project' project.id %}" method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Remove</button>
+        </form>
+        {% endif %}
+
+    </div>
+
+    <div class="p-2 text-light bg-secondary">comments</div>
+    <form style="position: relative;" action="/home/project/{{ project.id }}/comment" accept-charset="UTF-8"
+        method="post">
+        {% csrf_token %}
+        {{form|crispy}}
+    </form>
+
+    {% for comment in project.comment_set.all %}
+
+    <div style="position: relative" class="p-3">
+        <span>
+            {{ comment }}
+        </span>
+        <span style="float: right">
+            By: {{ comment.user }}
+            <a class="btn btn-danger ml-1" href="/comments/1/delete">x</a>
+        </span>
+
+    </div>
+
+
+    {% endfor %}
 
 </div>
+<form id="addDonation" accept-charset="UTF-8" method="POST">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-9">
+                <input type="hidden" name="project_id" value="{{project.id}}">
+                {{donation_form|crispy}}
+            </div>
+            <div class="col-3">
+                <button type="submit" class="btn btn-primary">Add</button>
+            </div>
+        </div>
+    </form>
+    <p class="card-text">{{ rate }}</p>
+{% else %}
+<h5 class="text-secondary"> no project found matching your id </h5>
+{% endif %}
 
+
+
+
+{% endblock %}
+
+{% block script %}
+<script>
+$('#addDonation').on('submit', function (e) {
+  e.preventDefault();
+  let donationAmount = $('#amount').val()
+  let serializedData = $(this).serialize();
+  if(donationAmount > 0){
+      $.ajax({
+            type: 'POST',
+            url: "{% url 'donate' %}",
+            data: serializedData,
+            success: function (response) {
+                $("#addDonation").trigger('reset');
+                $("#donations").html(response.donations)
+                alert("thank you for your donations")
+            },
+            error: function (response) {
+                alert(response.responseJSON.error)
+            }
+        })
+  } else if (donationAmount < 1){
+      alert("You can't add zero or negative donation")
+  }
+});
+</script>
 {% endblock %}
