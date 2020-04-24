@@ -112,13 +112,15 @@ AUTH_USER_MODEL = 'users.User'
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
+DATE_FORMAT = "d-M-Y"
+
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
-USE_L10N = True
+USE_L10N = False
 
 USE_TZ = True
 
@@ -146,5 +148,6 @@ CRISPY_TEMPLATE_PACK="bootstrap4"
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
+LOGIN_URL = "/home"
 LOGIN_REDIRECT_URL = "/home"
 LOGOUT_REDIRECT_URL = "/home"
