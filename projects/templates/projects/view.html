@@ -128,17 +128,16 @@ $('#addDonation').on('submit', function (e) {
   let donationAmount = $('#amount').val()
   let serializedData = $(this).serialize();
   if(donationAmount > 0){
-      console.log("something heres")
       $.ajax({
             type: 'POST',
             url: "{% url 'donate' %}",
             data: serializedData,
             success: function (response) {
                 $("#addDonation").trigger('reset');
-                $("#donations").html(response.donations);
+                alert("thank you for your donations")
             },
             error: function (response) {
-                alert(response)
+                alert(response.responseJSON.error)
             }
         })
   } else if (donationAmount < 1){
