@@ -62,6 +62,7 @@
         <p class="card-text"><a href="">{{ project.details }}</a></p>
         <p class="card-text"><a href="">{{ project.start_date }}</a></p>
         <p class="card-text"><a href="">{{ project.end_date }}</a></p>
+        <p class="card-text">Current donations: <a href=""><span id="donations">{{ project_donations.total_amount }}</span></a></p>
         <p class="card-text"><a href="../category/{{ project.category.id }}/projects">{{ project.category.name }}</a>
         </p>
 
@@ -134,6 +135,7 @@ $('#addDonation').on('submit', function (e) {
             data: serializedData,
             success: function (response) {
                 $("#addDonation").trigger('reset');
+                $("#donations").html(response.donations)
                 alert("thank you for your donations")
             },
             error: function (response) {
