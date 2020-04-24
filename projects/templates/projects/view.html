@@ -66,14 +66,14 @@
         <p class="card-text"><a href="../category/{{ project.category.id }}/projects">{{ project.category.name }}</a>
         </p>
 
-
+        {% if user == project.owner %}
         {% if  project.total_target|quarter >  project_donations.total_amount or project_donations.total_amount == None %}
         <form action="{% url 'delete_project' project.id %}" method="POST">
             {% csrf_token %}
             <button type="submit" class="btn btn-danger">Remove</button>
         </form>
         {% endif %}
-
+        {% endif %}
     </div>
 
     <div class="p-2 text-light bg-secondary">comments</div>

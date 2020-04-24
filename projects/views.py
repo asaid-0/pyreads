@@ -51,18 +51,19 @@ def view_project(request, id):
 def delete_project(request , id):
     if request.user.is_authenticated:
         if request.method == "POST":
-            project = Project.objects.get(id =id)
-            project_donations = project.donation_set.aggregate(total_amount=Sum('amount'))
-            project_donations = project_donations if  project_donations['total_amount'] else {'total_amount': 0} 
-            if (project.total_target*0.25 >  project_donations['total_amount']) or project_donations.total_amount == None:
-                project.delete()
-                return redirect("user_projects") # with message deleted successfully
-            else:
-                return redirect("user_projects")
+            project = Project.objects.filter(id =id)
+            if project.exists() and project.first().owner == request.user:
+                project = project.first()
+                project_donations = project.donation_set.aggregate(total_amount=Sum('amount'))
+                project_donations = project_donations if  project_donations['total_amount'] else {'total_amount': 0} 
+                if (project.total_target*0.25 >  project_donations['total_amount']) or project_donations.total_amount == None:
+                    project.delete()
+                    return redirect("user_projects") # with message deleted successfully
+                else:
+                    return redirect("user_projects")
         else:
             return redirect("user_projects")
-    else:
-        return redirect("home")
+    return redirect("home")
 
 
 
