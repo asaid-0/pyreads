@@ -1,10 +1,12 @@
 from django.shortcuts import render
-from .forms import AddProjectForm, ImageForm, CommentForm
+from .forms import AddProjectForm, ImageForm, CommentForm, DonateForm
 from django.shortcuts import redirect
 from django.db.models import Sum
 from users.models import Project, Comment, Category, Donation, Project_pictures, User, Rate
 from django.http import HttpResponse
-from .helpers import calc_rate
+from .helpers import calc_rate, calc_donations
+import json
+
 
 
 # Create your views here.
@@ -49,12 +51,16 @@ def view_project(request, id):
         for user_project in user_projects:
             if user_project.id == int(id):
                 total_amount_set = Donation.objects.values('project_id').annotate(total_amount=Sum('amount'))
+                donations = Donation.objects.filter(project=id)
+                donations = calc_donations(donations)
                 rates = Rate.objects.filter(project_id=request.user.id)
                 rate = calc_rate(rates)
-                print(rate)
-                context = {"project": project.first() , "total_amount_set": total_amount_set, "rate": rate, "form": CommentForm() }
+                context = {"project": project.first() , 
+                           "total_amount_set": total_amount_set, 
+                           "rate": rate['actual'], "base_rate":rate['base'],
+                           "donations":donations, "form": CommentForm(), "donation_form": DonateForm() }
             else:
-                context = {"project": project.first() , "form": CommentForm() }
+                context = {"project": project.first() , "form": CommentForm(), "donation_form": DonateForm() }
     else:
         context = {"project": None}
 
@@ -111,3 +117,23 @@ def get_category_projects(request, id):
     projects = category.project_set.all()
     context = {"projects": projects, "category": category}
     return render(request, "projects/category_projects.html", context)
+
+
+def add_donation(request):
+    if request.is_ajax and request.method == 'POST':
+        #save donation 
+        project_id = request.POST['project_id']
+        project = Project.objects.get(id=project_id)
+        donation = Donation()
+        donation.user = request.user
+        donation.amount = request.POST['amount']
+        donation.project = project
+        donation.save()
+        
+        #return amount of donations
+        donations = Donation.objects.filter(project=project_id)
+        donations = calc_donations(donations)
+        print(donations)
+        return HttpResponse(json.dumps({'donations': donations}), content_type="application/json")
+    else:
+        return HttpResponse(json.dumps({'error': "Something went wrong"}), content_type="application/json")
