@@ -2,7 +2,7 @@ from django.shortcuts import render
 from .forms import AddProjectForm, ImageForm, CommentForm
 from django.shortcuts import redirect
 from django.db.models import Sum
-from users.models import Project, Comment, Category, Donation, Project_pictures, User
+from users.models import Project, Comment, Category, Donation, Project_pictures, User, Project_pictures as Pics
 from django.http import HttpResponse
 
 
@@ -41,8 +41,9 @@ def add_project(request):
 
 def view_project(request, id):
     project = Project.objects.get(id=int(id))
+    pics = Pics.objects.filter(project=project)
     project_donations = project.donation_set.aggregate(total_amount=Sum('amount'))
-    context = {"project": project , "project_donations": project_donations, "form": CommentForm() }
+    context = {"project": project , "project_donations": project_donations, "range": range(pics.count()) ,"pics": pics, "form": CommentForm() }
         
     return render(request, "projects/view.html", context)
 
