@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %} Project {% endblock %}
+{% load static %}
 
 {% block content %}
 {% load crispy_forms_tags %}
@@ -17,9 +18,9 @@
             <p class="card-text"><a href="">{{ project.total_target }}</a></p>
             <p class="card-text"><a href="">{{ project.start_date }}</a></p>
             <p class="card-text"><a href="">{{ project.end_date }}</a></p>
+            <p class="card-text"><a href=""><span id="donations">{{ donations }}</span></a></p>
             <p class="card-text"><a
                     href="../category/{{ project.category.id }}/projects">{{ project.category.name }}</a></p>
-            
                 
             {% for total_amount_project in total_amount_set %} 
                 {% if  total_amount_project.total_amount  <   project.total_target|quarter and  total_amount_project.project_id == project.id  %}
@@ -29,7 +30,8 @@
                     </form> 
                 {% endif %}
             {% endfor %}
-            <p class="card-text">{{ rate }}</p>
+            
+            
         </div>
         
 
@@ -56,6 +58,19 @@
         {% endfor %}
 
     </div>
+    <form id="addDonation" accept-charset="UTF-8" method="POST">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-9">
+                <input type="hidden" name="project_id" value="{{project.id}}">
+                {{donation_form|crispy}}
+            </div>
+            <div class="col-3">
+                <button type="submit" class="btn btn-primary">Add</button>
+            </div>
+        </div>
+    </form>
+    <p class="card-text">{{ rate }}</p>
     {% else %}
     <h5 class="text-secondary"> no project found matching your id </h5>
     {% endif %}
@@ -64,4 +79,31 @@
 
 </div>
 
+{% endblock %}
+
+{% block script %}
+<script>
+$('#addDonation').on('submit', function (e) {
+  e.preventDefault();
+  let donationAmount = $('#amount').val()
+  let serializedData = $(this).serialize();
+  if(donationAmount > 0){
+      console.log("something heres")
+      $.ajax({
+            type: 'POST',
+            url: "{% url 'donate' %}",
+            data: serializedData,
+            success: function (response) {
+                $("#addDonation").trigger('reset');
+                $("#donations").html(response.donations);
+            },
+            error: function (response) {
+                alert(response)
+            }
+        })
+  } else if (donationAmount < 1){
+      alert("You can't add zero or negative donation")
+  }
+});
+</script>
 {% endblock %}
