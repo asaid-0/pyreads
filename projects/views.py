@@ -98,18 +98,24 @@ def get_category_projects(request, id):
 def add_donation(request):
     if request.is_ajax and request.method == 'POST':
         #save donation 
-        project_id = request.POST['project_id']
-        project = Project.objects.get(id=project_id)
-        donation = Donation()
-        donation.user = request.user
-        donation.amount = request.POST['amount']
-        donation.project = project
-        donation.save()
-        
-        #return amount of donations
-        donations = Donation.objects.filter(project=project_id)
-        donations = calc_donations(donations)
-        print(donations)
-        return HttpResponse(json.dumps({'donations': donations}), content_type="application/json")
+        if float(request.POST['amount']) > 0:
+            try:
+                project_id = request.POST['project_id']
+                project = Project.objects.get(id=project_id)
+
+                donation = Donation()
+                donation.user = request.user
+                donation.amount = request.POST['amount']
+                donation.project = project
+                donation.save()
+                
+                #return amount of donations
+                donations = project.donation_set.aggregate(amount=Sum('amount'))
+                return HttpResponse(json.dumps({'donations': donations['amount']}), content_type="application/json")
+                
+            except:
+                return HttpResponse(json.dumps({'error': "Something went wrong"}), content_type="application/json", status=403)
+        else:
+            return HttpResponse(json.dumps({'error': "Something went wrong"}), content_type="application/json", status=403)
     else:
-        return HttpResponse(json.dumps({'error': "Something went wrong"}), content_type="application/json")
+        return HttpResponse(json.dumps({'error': "Something went wrong"}), content_type="application/json", status=400)
