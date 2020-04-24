@@ -5,7 +5,6 @@ from django.db.models import Sum, Avg
 from users.models import Project, Comment, Category, Donation, Project_pictures, User, Rate, Project_pictures as Pics
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-from .helpers import calc_rate, calc_donations
 import json
 
 @login_required
@@ -94,7 +93,7 @@ def get_category_projects(request, id):
     context = {"projects": projects, "category": category}
     return render(request, "projects/category_projects.html", context)
 
-
+@login_required
 def add_donation(request):
     if request.is_ajax and request.method == 'POST':
         #save donation 
@@ -112,7 +111,7 @@ def add_donation(request):
                 #return amount of donations
                 donations = project.donation_set.aggregate(amount=Sum('amount'))
                 return HttpResponse(json.dumps({'donations': donations['amount']}), content_type="application/json")
-                
+
             except:
                 return HttpResponse(json.dumps({'error': "Something went wrong"}), content_type="application/json", status=403)
         else:
