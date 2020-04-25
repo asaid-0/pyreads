@@ -7,6 +7,8 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 import json
 
+comment_form = CommentForm()
+
 @login_required
 def add_project(request):
     current_user = request.user
@@ -31,7 +33,8 @@ def add_project(request):
 
 
 @login_required
-def view_project(request, id):
+def view_project(request, id, form=CommentForm()):
+    global comment_form
     project = Project.objects.get(id=int(id))
     pics = Pics.objects.filter(project=project)
     project_donations = project.donation_set.aggregate(total_amount=Sum('amount'))
@@ -45,7 +48,8 @@ def view_project(request, id):
                 "project_donations": project_donations,
                 "rate":project_rate['rate'], "range": range(pics.count()),
                 "pics": pics,
-                "form": CommentForm(), "donation_form": DonateForm()
+                "form": comment_form,
+                "donation_form": DonateForm()
             }
         
     return render(request, "projects/view.html", context)
@@ -106,7 +110,8 @@ def report_comment(request, id):
 
 @login_required
 def add_comment(request, id):
-    form = CommentForm(request.POST)
+    global comment_form
+    comment_form = CommentForm(request.POST)
     project = Project.objects.filter(id=int(id))
     if not (project.exists() and request.user.is_authenticated):
         return redirect("home")
@@ -114,17 +119,20 @@ def add_comment(request, id):
     if request.method.lower() == "get":
         return redirect("view_project", id=project.first().id)
 
-    if form.is_valid():
+    if comment_form.is_valid():
         user = request.user
-        create_comment = form.save(commit=False)
+        create_comment = comment_form.save(commit=False)
         create_comment.user = user
         create_comment.project = project.first()
         create_comment.save()
         return redirect("view_project", id=project.first().id)
     else:
-        return render(
-            request, f"projects/view.html", {"project": project.first(), "form": form}
-        )
+        return redirect("view_project", id=project.first().id)
+
+        # return redirect("view_project", id=comment.project_id)
+        # return render(
+        #     request, f"projects/view.html", {"project": project.first(), "form": form}
+        # )
 
 @login_required
 def get_category_projects(request, id):
