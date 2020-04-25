@@ -71,6 +71,18 @@
             <button type="submit" class="btn btn-danger">Remove</button>
         </form>
         {% endif %}
+        {% else %}
+
+        {% if is_reported %}
+        <button type="submit" class="btn btn-success ml-1" disabled>reported!</button>
+        {% else %}
+
+        <form action="{% url 'report_project' project.id %}" method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger ml-1">report</button>
+        </form>
+        {% endif %}
+
         {% endif %}
     </div>
 

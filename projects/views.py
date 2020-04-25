@@ -44,6 +44,7 @@ def view_project(request, id, form=CommentForm()):
         reported_comments.append(comment.id)
     context = {
                 "project": project,
+                "is_reported": request.user.project_reports.filter(id=project.id).exists(),
                 "reported_comments": reported_comments,
                 "project_donations": project_donations,
                 "rate":project_rate['rate'], "range": range(pics.count()),
@@ -109,6 +110,18 @@ def report_comment(request, id):
     
 
 @login_required
+def report_project(request, id):
+    if request.method == "POST":
+        project = Project.objects.filter(id=id)
+        if project.exists():
+            project = project.first()
+            if not request.user.project_reports.filter(id=project.id).exists():
+                request.user.project_reports.add(project)
+            return redirect("view_project", id=project.id)
+    return redirect("home")
+
+
+@login_required
 def add_comment(request, id):
     global comment_form
     comment_form = CommentForm(request.POST)
@@ -128,11 +141,6 @@ def add_comment(request, id):
         return redirect("view_project", id=project.first().id)
     else:
         return redirect("view_project", id=project.first().id)
-
-        # return redirect("view_project", id=comment.project_id)
-        # return render(
-        #     request, f"projects/view.html", {"project": project.first(), "form": form}
-        # )
 
 @login_required
 def get_category_projects(request, id):
