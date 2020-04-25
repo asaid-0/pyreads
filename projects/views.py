@@ -9,6 +9,17 @@ import json
 
 comment_form = CommentForm()
 
+def similar_projects(current_project):
+    # i know i can simply return curent_project.tags.similar_objects()
+    # but i will implement this logic
+    tags = current_project.tags.all()
+    similar_projects = []
+    for project in Project.objects.all().exclude(id=current_project.id):
+        similarity_factor = len(set(tags) & set(project.tags.all()))
+        if similarity_factor > 0:
+            similar_projects.append({"factor": similarity_factor, "project": project})
+    return sorted(similar_projects, key=lambda p: p['factor'], reverse=True)[:4]
+
 @login_required
 def add_project(request):
     current_user = request.user
@@ -44,6 +55,7 @@ def view_project(request, id, form=CommentForm()):
         reported_comments.append(comment.id)
     context = {
                 "project": project,
+                "similar_projects": similar_projects(project),
                 "is_reported": request.user.project_reports.filter(id=project.id).exists(),
                 "reported_comments": reported_comments,
                 "project_donations": project_donations,
@@ -54,25 +66,6 @@ def view_project(request, id, form=CommentForm()):
             }
         
     return render(request, "projects/view.html", context)
-
-
-def delete_project(request , id):
-    if request.user.is_authenticated:
-        if request.method == "POST":
-            
-                
-                project_donations = project.donation_set.aggregate(total_amount=Sum('amount'))
-                project_donations = project_donations if  project_donations['total_amount'] else {'total_amount': 0} 
-                if (project.total_target*0.25 >  project_donations['total_amount']) or project_donations.total_amount == None:
-                    project.delete()
-                    return redirect("user_projects") # with message deleted successfully
-                else:
-                    return redirect("user_projects")
-        else:
-            return redirect("user_projects")
-    return redirect("home")
-
-
 
 
 @login_required

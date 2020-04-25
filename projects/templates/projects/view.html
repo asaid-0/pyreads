@@ -143,6 +143,19 @@
 <h5 class="text-secondary"> no project found matching your id </h5>
 {% endif %}
 
+<div class="text-secondary p-5 m-5">
+<p>Similar Projects: </p>
+{% for similar in similar_projects %}
+
+<li>
+    <span><a href="/home/project/{{similar.project.id}}">{{ similar.project }}</a></span>
+    <span>factor: {{ similar.factor }}</span>
+
+</li>
+
+{% endfor %}
+
+</div>
 
 
 
