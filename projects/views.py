@@ -36,10 +36,17 @@ def view_project(request, id):
     pics = Pics.objects.filter(project=project)
     project_donations = project.donation_set.aggregate(total_amount=Sum('amount'))
     project_rate = project.rate_set.aggregate(rate = Avg('rate'))
-    context = {"project": project , "project_donations": project_donations,
-               "rate":project_rate['rate'], "range": range(pics.count()),
-               "pics": pics,
-               "form": CommentForm(), "donation_form": DonateForm() }
+    reported_comments = []
+    for comment in request.user.comment_reports.filter(project=project):
+        reported_comments.append(comment.id)
+    context = {
+                "project": project,
+                "reported_comments": reported_comments,
+                "project_donations": project_donations,
+                "rate":project_rate['rate'], "range": range(pics.count()),
+                "pics": pics,
+                "form": CommentForm(), "donation_form": DonateForm()
+            }
         
     return render(request, "projects/view.html", context)
 
@@ -83,6 +90,19 @@ def delete_project(request, id):
             else:
                 return redirect("user_projects")
     return redirect("user_projects")
+
+
+@login_required
+def report_comment(request, id):
+    if request.method == "POST":
+        comment = Comment.objects.filter(id=id)
+        if comment.exists():
+            comment = comment.first()
+            if not request.user.comment_reports.filter(id=comment.id).exists():
+                request.user.comment_reports.add(comment)
+            return redirect("view_project", id=comment.project_id)
+    return redirect("home")
+    
 
 @login_required
 def add_comment(request, id):
