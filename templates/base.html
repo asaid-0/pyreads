@@ -11,7 +11,8 @@
     integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
     crossorigin="anonymous"></script>
   <!-- card link -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
   <link href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round" rel="stylesheet">
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -22,7 +23,8 @@
   <link rel="stylesheet" href="{% static "home/card.css" %}">
   <link rel="stylesheet" href="{% static "home/styles.css" %}">
   <title>{% block title %} library {% endblock %}</title>
-
+  {% block style %}{% endblock %}
+  
 </head>
 
 <body>
@@ -57,12 +59,13 @@
               class="fa fa-pie-chart"></i><span>Donations</span></a></li>
         <li class="nav-item dropdown">
           <a href="#" data-toggle="dropdown" class="nav-link  user-action"><img
-            src="../..{{ user.profile_picture.url }}" class="avatar" alt="Avatar"> {{user.first_name}}
+              src="../..{{ user.profile_picture.url }}" class="avatar" alt="Avatar"> {{user.first_name}}
             {{ user.last_name }} <b class="caret"></b></a>
           <ul class="dropdown-menu">
             <li><a href="{% url 'profile' %}" class="dropdown-item"><i class="fa fa-user-o"></i> Profile</a></li>
             <li class="divider dropdown-divider"></li>
-            <li><a href="{% url 'logout' %}" class="dropdown-item"><i class="material-icons">&#xE8AC;</i> Logout</a></li>
+            <li><a href="{% url 'logout' %}" class="dropdown-item"><i class="material-icons">&#xE8AC;</i> Logout</a>
+            </li>
           </ul>
         </li>
       </ul>
@@ -82,7 +85,13 @@
     {% block content %}{% endblock %}
   </div>
 
-
+  <div class="container my-5">
+    <div class="footer">
+      <div class="footer-copyright text-center py-3">© 2020 Copyright:
+        <a href="https://github.com/asaid-0/pyreads"> Pyfund.com</a>
+      </div>
+    </div>
+  </div>
 
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
     integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
@@ -97,11 +106,7 @@
 
   {% block script %}{% endblock %}
 
-  <div class="footer">
-    <div class="footer-copyright text-center py-3">© 2020 Copyright:
-      <a href="https://github.com/asaid-0/pyreads"> Pyfund.com</a>
-    </div>
-  </div>
+
 
 </body>
 
