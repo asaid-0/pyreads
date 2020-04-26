@@ -1,10 +1,13 @@
 .l-container{
     background-color: #2c2f33;
+    /* background-color: blue; */
     color: #ffffff;
 }
 .l-container a{
     color: #99aab5;
+    background-color: #2c2f33;
 }
 .l-container a:hover{
     color: #ffffff;
+    background-color: #7289da;
 }
