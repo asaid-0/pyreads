@@ -28,7 +28,7 @@ class ConfirmPasswordForm(forms.ModelForm):
         model = User
         fields = ("password",)
         labels = {"confirm_password": "Password"}
-
+    
     def clean(self):
         cleaned_data = super(ConfirmPasswordForm, self).clean()
         confirm_password = cleaned_data.get("password")

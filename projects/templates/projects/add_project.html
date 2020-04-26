@@ -9,11 +9,13 @@
         <div class="panel panel-primary">
             <div class="panel-heading text-center"><b>Add project</b></div>
             <div class="panel-body">
-                <form style="text-align: center;" method="POST" enctype="multipart/form-data">
+                <form method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                     {{form|crispy}}
                     {{image_form|crispy}}
-                    <button type="submit" class="save btn btn-success">Save</button>
+                    <div style="text-align: center;">
+                        <button type="submit" class="save btn btn-success">Save</button>
+                    </div>
                 </form>
             </div>
         </div>
