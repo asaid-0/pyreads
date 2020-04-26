@@ -61,6 +61,7 @@ def view_project(request, id, form=CommentForm()):
                 "reported_comments": reported_comments,
                 "project_donations": project_donations,
                 "rate":project_rate['rate'], "range": range(pics.count()),
+                "rateRange": range(1,6),
                 "pics": pics,
                 "form": comment_form,
                 "donation_form": DonateForm()
@@ -174,6 +175,37 @@ def add_donation(request):
 
             except:
                 return HttpResponse(json.dumps({'error': "Something went wrong"}), content_type="application/json", status=403)
+        else:
+            return HttpResponse(json.dumps({'error': "Something went wrong"}), content_type="application/json", status=403)
+    else:
+        return HttpResponse(json.dumps({'error': "Something went wrong"}), content_type="application/json", status=400)
+
+
+@login_required
+def add_rate(request):
+    if request.is_ajax and request.method == 'POST':
+        #save rate 
+        if int(request.POST['rate']) > 0:
+            project_id = request.POST['project_id']
+            recieved_rate = request.POST['rate']
+            try:
+                print('BANG')
+                project = Project.objects.get(id=project_id)
+                # check if rated already with current user
+                rate = Rate.objects.get(user=request.user, project=project)
+                if rate:
+                    rate.rate = recieved_rate
+                    rate.save()
+                else:
+                    rate = Rate()
+                    rate.user = request.user
+                    rate.rate = recieved_rate
+                    rate.project = project
+                    rate.save()
+                project_rate = project.rate_set.aggregate(rate = Avg('rate'))
+                return HttpResponse(json.dumps({'rate': project_rate['rate']}), content_type="application/json")
+            except:
+                return HttpResponse(json.dumps({'error': "project or user doesn't exist"}), content_type="application/json", status=403)
         else:
             return HttpResponse(json.dumps({'error': "Something went wrong"}), content_type="application/json", status=403)
     else:

@@ -149,7 +149,21 @@
         </div>
     </div>
 </form>
-<p class="card-text">{{ rate }}</p>
+
+<div class="row">
+    
+    <div class="rating">
+        {% for n in rateRange reversed%}
+            {% if n <= rate %}
+                <span id="rate-{{n}}" class="rated">☆</span>
+            {% else %}
+                <span id="rate-{{n}}">☆</span>
+            {% endif %}
+        {% endfor %}
+    </div>
+    <span style="position:relative;top:5px;font-size:1.5em" id="current_rating">{{ rate }}</span>
+</div>
+
 {% else %}
 <h5 class="text-secondary"> no project found matching your id </h5>
 {% endif %}
@@ -195,6 +209,32 @@
         } else if (donationAmount < 1) {
             alert("You can't add zero or negative donation")
         }
+    });
+
+    $(document).ready(function(){
+        $('.rating span').click(function (e) {
+            e.preventDefault();
+            let rate = $(this).attr("id").split("rate-")[1];
+            let project_id = {{project.id}};
+            $.ajax({
+                type: "post",
+                dataType: "json",
+                url: '{% url 'rate' %}',
+                data: {'rate': rate, 'project_id': project_id,  csrfmiddlewaretoken: '{{ csrf_token }}'},
+                success: function (data) {
+                    $("span").removeClass("rated");
+                    for(let i = 1; i <= 5; i++){
+                        if(i <= data.rate){
+                            $("#rate-"+i).addClass("rated");
+                        }
+                    }
+                    $("#current_rating").html(data.rate)
+                },
+                error: function (data, textStatus, errorThrown) {
+                    console.log(errorThrown);
+                }
+            });
+        });
     });
 </script>
 {% endblock %}

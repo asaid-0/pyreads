@@ -1,7 +1,11 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.db.models import Sum, Avg
+<<<<<<< HEAD
 from .models import User, Category, Project, Rate, Project_pictures
+=======
+from .models import User, Category, Project, Rate
+>>>>>>> f4683ebd77584c1f5580fdb24550fe0a25a6ca39
 from .forms import UserForm, ConfirmPasswordForm
 from django.shortcuts import redirect
 from django.contrib.auth import get_user_model
@@ -16,8 +20,13 @@ def home(request):
     latest_projects = Project.objects.all().order_by("-id")[:5]
     high_rated_set = (
         Rate.objects.values("project_id")
+<<<<<<< HEAD
         .annotate(avg_rate=Avg("rate"))
         .order_by("-avg_rate")[:5]
+=======
+        .annotate(sum_rate=Avg("rate"))
+        .order_by("-sum_rate")[:5]
+>>>>>>> f4683ebd77584c1f5580fdb24550fe0a25a6ca39
     )
     projects_pics= []
     for project in projects:
