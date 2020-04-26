@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from django.db.models import Sum
+from django.db.models import Sum, Avg
 from .models import User, Category, Project, Rate
 from .forms import UserForm, ConfirmPasswordForm
 from django.shortcuts import redirect
@@ -16,7 +16,7 @@ def home(request):
     latest_projects = Project.objects.all().order_by("-id")[:5]
     high_rated_set = (
         Rate.objects.values("project_id")
-        .annotate(sum_rate=Sum("rate"))
+        .annotate(sum_rate=Avg("rate"))
         .order_by("-sum_rate")[:5]
     )
     context = {
