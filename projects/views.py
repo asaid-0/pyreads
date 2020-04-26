@@ -5,6 +5,7 @@ from django.db.models import Sum, Avg
 from users.models import Project, Comment, Category, Donation, Project_pictures, User, Rate, Project_pictures as Pics
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 import json
 
 comment_form = CommentForm()
@@ -82,11 +83,12 @@ def delete_project(request, id):
             )
             if (
                 project.total_target * 0.25 > project_donations["total_amount"]
-            ) or project_donations.total_amount == None:
+            ) or project_donations["total_amount"] == None:
                 project.delete()
                 return redirect("user_projects")  # with message deleted successfully
             else:
-                return redirect("user_projects")
+                messages.error(request, "Project Can't be deleted.")
+                return redirect("view_project", id=project.id)
     return redirect("user_projects")
 
 
@@ -139,7 +141,16 @@ def add_comment(request, id):
 def get_category_projects(request, id):
     category = Category.objects.get(id=id)
     projects = category.project_set.all()
-    context = {"projects": projects, "category": category}
+    projects_pics= []
+    for project in projects:
+        project_pic = {}
+        project_pic = project.project_pictures_set.first()
+        projects_pics.append(project_pic)
+    context = {
+        "projects": projects,
+        "category": category,
+        "projects_pics": projects_pics
+    }
     return render(request, "projects/category_projects.html", context)
 
 @login_required

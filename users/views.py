@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from django.db.models import Sum
-from .models import User, Category, Project, Rate
+from django.db.models import Sum, Avg
+from .models import User, Category, Project, Rate, Project_pictures
 from .forms import UserForm, ConfirmPasswordForm
 from django.shortcuts import redirect
 from django.contrib.auth import get_user_model
@@ -16,14 +16,21 @@ def home(request):
     latest_projects = Project.objects.all().order_by("-id")[:5]
     high_rated_set = (
         Rate.objects.values("project_id")
-        .annotate(sum_rate=Sum("rate"))
-        .order_by("-sum_rate")[:5]
+        .annotate(avg_rate=Avg("rate"))
+        .order_by("-avg_rate")[:5]
     )
+    projects_pics= []
+    for project in projects:
+        project_pic = {}
+        project_pic = project.project_pictures_set.first()
+        projects_pics.append(project_pic)
+    print(projects_pics)
     context = {
         "categories": categories,
         "latest_projects": latest_projects,
         "high_rated_set": high_rated_set,
         "projects": projects,
+        "projects_pics": projects_pics,
     }
     return render(request, "users/home.html", context)
 
@@ -69,7 +76,15 @@ def get_projects(request):
     current_user = request.user
     user = User.objects.get(id=current_user.id)
     projects = user.project_set.all()
-    context = {"projects": projects}
+    projects_pics= []
+    for project in projects:
+        project_pic = {}
+        project_pic = project.project_pictures_set.first()
+        projects_pics.append(project_pic)
+    context = {
+        "projects": projects,
+        "projects_pics": projects_pics
+    }
     return render(request, "users/user_projects.html", context)
 
 
@@ -78,5 +93,13 @@ def get_donations(request):
     current_user = request.user
     user = User.objects.get(id=current_user.id)
     donations = user.project_donations.all()
-    context = {"donations": donations}
+    projects_pics= []
+    for project in donations:
+        project_pic = {}
+        project_pic = project.project_pictures_set.first()
+        projects_pics.append(project_pic)
+    context = {
+        "donations": donations,
+        "projects_pics": projects_pics
+    }
     return render(request, "users/user_donations.html", context)

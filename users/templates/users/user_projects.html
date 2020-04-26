@@ -7,21 +7,50 @@
 <div class="container">
     <a href="{% url 'add_project' %}" class="btn btn-info" role="button">Add project</a>
     <h1> Your Projects</h1>
-<ul> 
-    {% for project in projects %}
-    <li>
-        <!-- <a href="../../project/{{ project.id }}">{{project.title}}</a> --> 
-        <a href="{% url 'view_project' project.id %}">{{project.title}}</a>
-    </li>
-    <!-- {% for project_pics in project.project_projects_set.all %}
-        <li>
-            {{  project_pics  }}
-        </li>
-    {% endfor %} -->
-    {% empty %}
-            <h2>Sorry, you don't have projects.</h2>
-    {% endfor %}
-</ul>
+
+    <!-- Begin Project card -->
+
+    <div class="container d-flex flex-column align-items-start">
+        <div class="row d-flex justify-content-start">
+            {% for project in projects %}
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="card border-0 shadow mb-4">
+                    <!-- Card image -->
+                    <div class="view">
+                        {% for project_pic in projects_pics %}
+                        {% if project.id == project_pic.project_id%}
+                        
+                        <img class="card-img-top rounded-top" src="{{project_pic.picture.url}}" alt="Card image cap">
+                    
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                    <!-- Card content -->
+                    <div class="card-body border rounded-bottom">
+                        <h5 class="card-title">{{project.title}}</h5>
+                        <hr>
+                        <ul class="list-unstyled d-flex justify-content-between mb-3 text-center small">
+                            <li class="pledged">
+                                <p class="mb-1 font-weight-bold text-dark body-info">Target</p>
+                            </li class="pledged">
+                            <li>
+                                <span class="amount body-figure">${{project.total_target}}</span>
+                            </li>
+                        </ul>
+                        <div class="card-footer d-flex justify-content-center">
+                            <a class="btn btn-info col-lg-10" href="{% url 'view_project' project.id %}">
+                                View Project</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <h2>Sorry, There are no projects yet.</h2>
+            {% endfor %}
+        </div>
+    </div>
+    <!-- End Project card -->
+
 
 </div>
 

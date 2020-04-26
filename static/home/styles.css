@@ -1,0 +1,10 @@
+.l-container{
+    background-color: #2c2f33;
+    color: #ffffff;
+}
+.l-container a{
+    color: #99aab5;
+}
+.l-container a:hover{
+    color: #ffffff;
+}
