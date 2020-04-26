@@ -118,7 +118,7 @@ class Donation(models.Model):
 class Report(models.Model):
     user= models.ForeignKey('User', null=True, on_delete=models.CASCADE)
     project = models.ForeignKey('Project', null=True, on_delete=models.CASCADE)
-    report_content = models.FloatField(null=True)
+    report_content = models.CharField(max_length=200, null=True)
 
 class Project_pictures(models.Model):
     project = models.ForeignKey('Project', null=True, on_delete=models.CASCADE)

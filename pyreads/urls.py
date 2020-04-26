@@ -26,8 +26,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('home/', include('users.urls')),
     path('home/', include('projects.urls')),
-    path('', include('django.contrib.auth.urls')),
+    path('accounts/', include('django.contrib.auth.urls')),
     path('register/',register,name='register'),
+    path('accounts/',include('allauth.urls')),
     path('activate/<slug:uidb64>/<slug:token>/', activate, name='activate'),
 ]
 

@@ -7,6 +7,19 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 import json
 
+comment_form = CommentForm()
+
+def similar_projects(current_project):
+    # i know i can simply return curent_project.tags.similar_objects()
+    # but i will implement this logic
+    tags = current_project.tags.all()
+    similar_projects = []
+    for project in Project.objects.all().exclude(id=current_project.id):
+        similarity_factor = len(set(tags) & set(project.tags.all()))
+        if similarity_factor > 0:
+            similar_projects.append({"factor": similarity_factor, "project": project})
+    return sorted(similar_projects, key=lambda p: p['factor'], reverse=True)[:4]
+
 @login_required
 def add_project(request):
     current_user = request.user
@@ -31,15 +44,26 @@ def add_project(request):
 
 
 @login_required
-def view_project(request, id):
+def view_project(request, id, form=CommentForm()):
+    global comment_form
     project = Project.objects.get(id=int(id))
     pics = Pics.objects.filter(project=project)
     project_donations = project.donation_set.aggregate(total_amount=Sum('amount'))
     project_rate = project.rate_set.aggregate(rate = Avg('rate'))
-    context = {"project": project , "project_donations": project_donations,
-               "rate":project_rate['rate'], "range": range(pics.count()),
-               "pics": pics,
-               "form": CommentForm(), "donation_form": DonateForm() }
+    reported_comments = []
+    for comment in request.user.comment_reports.filter(project=project):
+        reported_comments.append(comment.id)
+    context = {
+                "project": project,
+                "similar_projects": similar_projects(project),
+                "is_reported": request.user.project_reports.filter(id=project.id).exists(),
+                "reported_comments": reported_comments,
+                "project_donations": project_donations,
+                "rate":project_rate['rate'], "range": range(pics.count()),
+                "pics": pics,
+                "form": comment_form,
+                "donation_form": DonateForm()
+            }
         
     return render(request, "projects/view.html", context)
 
@@ -47,26 +71,53 @@ def view_project(request, id):
 @login_required
 def delete_project(request, id):
     if request.method == "POST":
-        project = Project.objects.get(id=id)
-        project_donations = project.donation_set.aggregate(total_amount=Sum("amount"))
-        project_donations = (
-            project_donations
-            if project_donations["total_amount"]
-            else {"total_amount": 0}
-        )
-        if (
-            project.total_target * 0.25 > project_donations["total_amount"]
-        ) or project_donations.total_amount == None:
-            project.delete()
-            return redirect("user_projects")  # with message deleted successfully
-        else:
-            return redirect("user_projects")
-    else:
-        return redirect("user_projects")
+        project = Project.objects.filter(id=id)
+        if project.exists() and project.first().owner == request.user:
+            project = project.first()
+            project_donations = project.donation_set.aggregate(total_amount=Sum("amount"))
+            project_donations = (
+                project_donations
+                if project_donations["total_amount"]
+                else {"total_amount": 0}
+            )
+            if (
+                project.total_target * 0.25 > project_donations["total_amount"]
+            ) or project_donations.total_amount == None:
+                project.delete()
+                return redirect("user_projects")  # with message deleted successfully
+            else:
+                return redirect("user_projects")
+    return redirect("user_projects")
+
+
+@login_required
+def report_comment(request, id):
+    if request.method == "POST":
+        comment = Comment.objects.filter(id=id)
+        if comment.exists():
+            comment = comment.first()
+            if not request.user.comment_reports.filter(id=comment.id).exists():
+                request.user.comment_reports.add(comment)
+            return redirect("view_project", id=comment.project_id)
+    return redirect("home")
+    
+
+@login_required
+def report_project(request, id):
+    if request.method == "POST":
+        project = Project.objects.filter(id=id)
+        if project.exists():
+            project = project.first()
+            if not request.user.project_reports.filter(id=project.id).exists():
+                request.user.project_reports.add(project)
+            return redirect("view_project", id=project.id)
+    return redirect("home")
+
 
 @login_required
 def add_comment(request, id):
-    form = CommentForm(request.POST)
+    global comment_form
+    comment_form = CommentForm(request.POST)
     project = Project.objects.filter(id=int(id))
     if not (project.exists() and request.user.is_authenticated):
         return redirect("home")
@@ -74,17 +125,15 @@ def add_comment(request, id):
     if request.method.lower() == "get":
         return redirect("view_project", id=project.first().id)
 
-    if form.is_valid():
+    if comment_form.is_valid():
         user = request.user
-        create_comment = form.save(commit=False)
+        create_comment = comment_form.save(commit=False)
         create_comment.user = user
         create_comment.project = project.first()
         create_comment.save()
         return redirect("view_project", id=project.first().id)
     else:
-        return render(
-            request, f"projects/view.html", {"project": project.first(), "form": form}
-        )
+        return redirect("view_project", id=project.first().id)
 
 @login_required
 def get_category_projects(request, id):
