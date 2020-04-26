@@ -6,6 +6,7 @@ from taggit.managers import TaggableManager
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from datetime import datetime
+from django_countries.fields import CountryField
 
 class CustomUserManager(BaseUserManager):
     def create_user(self ,email, password=None):
@@ -31,7 +32,7 @@ class User(AbstractBaseUser):
     username=models.CharField(max_length=40, null=True)
     mobile_phone = models.CharField(max_length=15,validators=[RegexValidator('^0(10|11|12|15)\d{8}$',message="please enter egyptian mobile phone: like= 01012345678")])
     birth_date = models.DateField(null=True, blank=True)
-    country = models.CharField(max_length=40, null=True, blank=True)
+    country = CountryField(null=True, blank=True)
     facebook_account = models.URLField(null=True, blank=True)
     profile_picture = models.ImageField(upload_to = 'images/', default='')
     project_reports = models.ManyToManyField('Project',through='Report', related_name='reports', blank=True)
