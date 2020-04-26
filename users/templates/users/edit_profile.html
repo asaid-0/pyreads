@@ -4,14 +4,17 @@
 
 {% block content %}
 {% load crispy_forms_tags %}
-<div class="container">
-    <div class="row my-3">
-        <div class="col-lg-8 order-lg-2">
-            <form method="POST" enctype="multipart/form-data">
-                {% csrf_token %}
-                {{form|crispy}}
-                <button type="submit" class="save btn btn-default">Save</button>
-            </form>
+<div class="container d-flex justify-content-center">
+    <div class="col-7 ">
+        <div class="panel panel-primary">
+            <div class="panel-heading text-center"><b>Edit profile</b></div>
+            <div class="panel-body">
+                <form style="text-align: center;" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{form|crispy}}
+                    <button type="submit" class="save btn btn-success">Save</button>
+                </form>
+            </div>
         </div>
     </div>
 </div>
