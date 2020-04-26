@@ -13,7 +13,9 @@
                     {% csrf_token %}
                     {{form|crispy}}
                     {{image_form|crispy}}
-                    <button type="submit" class="save btn btn-success">Save</button>
+                    <div style="text-align: center;">
+                        <button type="submit" class="save btn btn-success">Save</button>
+                    </div>
                 </form>
             </div>
         </div>
