@@ -7,15 +7,16 @@
 }
   
 a.card-text {
-    color:inherit;
+    color: inherit;
 }
 a:hover {
-    color:#4C49A2;
-    text-decoration:none;
+    color: #18191C;
+    text-decoration: underline;
 }
 .card-title{
     font-size: 3rem;
-
+    color: #7289da;
+    /* background-color: lawngreen; */
 }
 .body-info{
     font-size: 2rem;
@@ -23,13 +24,21 @@ a:hover {
 .body-figure{
     font-size: 2rem;
 }
-.card-footer{
+/* .card-footer{
     height: 5rem;
     background-color: white;
-}
+} */
 .btn{
     font-size: 1.75rem;
 }
 .card-img-top {
     height: 40vh;
+}
+.card-text{
+    font-size: 1.75rem;
+    width: 20rem;
+    resize: horizontal;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
