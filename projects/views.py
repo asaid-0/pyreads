@@ -184,20 +184,20 @@ def add_rate(request):
             project_id = request.POST['project_id']
             recieved_rate = request.POST['rate']
             try:
-                print('BANG')
                 project = Project.objects.get(id=project_id)
                 # check if rated already with current user
-                rate = Rate.objects.get(user=request.user, project=project)
-                if rate:
+                try:
+                    rate = Rate.objects.get(user=request.user, project=project)
                     rate.rate = recieved_rate
                     rate.save()
-                else:
+                except:
                     rate = Rate()
                     rate.user = request.user
                     rate.rate = recieved_rate
                     rate.project = project
                     rate.save()
                 project_rate = project.rate_set.aggregate(rate = Avg('rate'))
+                print(project_rate)
                 return HttpResponse(json.dumps({'rate': project_rate['rate']}), content_type="application/json")
             except:
                 return HttpResponse(json.dumps({'error': "project or user doesn't exist"}), content_type="application/json", status=403)
@@ -223,7 +223,7 @@ def search_by_tag_title(request):
             search_results['tags_results'] = None
         except Tag.DoesNotExist:
             search_results['tags_results'] = None
-
+        print(search_results)
         return render(request, "projects/search.html", {'results':search_results, 'key_word':search_word})
     else:
         return render(request, "projects/search.html", {'results':None, 'key_word':'No Keyword entered'})
