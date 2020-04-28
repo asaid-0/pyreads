@@ -70,7 +70,7 @@ def get_projects(request):
     current_user = request.user
     user = User.objects.get(id=current_user.id)
     projects = user.project_set.all()
-    
+
     context = {
         "projects": projects,
     }
@@ -81,7 +81,7 @@ def get_projects(request):
 def get_donations(request):
     current_user = request.user
     user = User.objects.get(id=current_user.id)
-    donations = user.project_donations.all()
+    donations = user.project_donations.distinct()
     context = {
         "donations": donations,
     }

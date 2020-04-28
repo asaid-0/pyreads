@@ -59,8 +59,13 @@
         <p class="card-text"><a href="">{{ project.details }}</a></p>
         <p class="card-text"><a href="">{{ project.start_date }}</a></p>
         <p class="card-text"><a href="">{{ project.end_date }}</a></p>
-        <p class="card-text">Current donations: <a href=""><span
-                    id="donations">{{ project_donations.total_amount }}</span></a></p>
+        <p class="card-text">Current donations: <span id="donations">
+                    {% if project_donations.total_amount %}
+                        {{ project_donations.total_amount }}
+                    {% else %}
+                        0
+                    {% endif %}
+                    </span></p>
         <p class="card-text"><a href="../category/{{ project.category.id }}/projects">{{ project.category.name }}</a>
         </p>
 
@@ -161,7 +166,13 @@
             {% endif %}
         {% endfor %}
     </div>
-    <span style="position:relative;top:5px;font-size:1.5em" id="current_rating">{{ rate }}</span>
+    <span style="position:relative;top:5px;font-size:1.5em" id="current_rating">
+        {% if rate %}
+            {{ rate }}
+        {% else %}
+            0
+        {% endif %}
+    </span>
 </div>
 
 {% else %}
