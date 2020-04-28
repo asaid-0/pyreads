@@ -42,12 +42,12 @@
     {% if user.is_authenticated %}
     <!-- Collection of nav links, forms, and other content for toggling -->
     <div id="navbarCollapse" class="collapse navbar-collapse justify-content-start">
-      <form class="navbar-form form-inline">
+      <form id="searchForm" class="navbar-form form-inline" action="{% url 'search' %}" method="GET">
         <div class="input-group search-box">
-          <input type="text" id="search" class="form-control" placeholder="Search here...">
-          <span class="input-group-addon"><i class="material-icons">&#xE8B6;</i></span>
+          <input type="text" id="search" name="q" class="form-control" placeholder="Search here...">
+          <button class="input-group-addon" id="searchBox" type="submit"><i class="material-icons">&#xE8B6;</i></button>
         </div>
-      </form>
+      </form>      
       <ul class="nav navbar-nav navbar-right ml-auto">
         <li class="nav-item active"><a href="{% url 'home' %}" class="nav-link"><i
               class="fa fa-home"></i><span>Home</span></a></li>
@@ -103,6 +103,16 @@
     integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
     crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+  <script>
+    //script for searching
+    $("#searchForm").on('submit', function(e){
+        let search = $('#search').val();
+        if(!search){
+          e.preventDefault()
+      }
+    })
+  </script>
 
   {% block script %}{% endblock %}
 

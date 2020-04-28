@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %} Search {% endblock %}
+{% load static %}
+
+{% block content %}
+
+<h1>Search results for : {{ key_word }}</h1>
+
+    {% if results.tag_results %}
+    <h2>By Tag:</h2>
+        <ul>
+        {% for project in results.tag_results %}
+            <li><a href="{% url 'view_project' project.id %}">{{project.title}}</a></li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+    
+    {% if results.title_results %}
+    <h2>By Title:</h2>
+        <ul>
+        {% for project in results.title_results %}
+            <li><a href="{% url 'view_project' project.id %}">{{project.title}}</a></li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+    
+    {% if not results.title_results and not results.tags_results %}
+    <h3>No search results</h3>
+    {% endif %}
+
+
+{% endblock %}

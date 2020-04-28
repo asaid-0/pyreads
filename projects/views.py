@@ -2,6 +2,7 @@ from django.shortcuts import render
 from .forms import AddProjectForm, ImageForm, CommentForm, DonateForm
 from django.shortcuts import redirect
 from django.db.models import Sum, Avg
+from taggit.models import Tag
 from users.models import Project, Comment, Category, Donation, Project_pictures, User, Rate, Project_pictures as Pics
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
@@ -210,3 +211,25 @@ def add_rate(request):
             return HttpResponse(json.dumps({'error': "Something went wrong"}), content_type="application/json", status=403)
     else:
         return HttpResponse(json.dumps({'error': "Something went wrong"}), content_type="application/json", status=400)
+
+
+def search_by_tag_title(request):
+    if request.method == 'GET' and request.GET.get('q'):
+        search_word = request.GET['q']
+        search_results = {}
+        try:
+            search_results['title_results'] = Project.objects.get(title=search_word)
+        except Project.DoesNotExist:
+            search_results['title_results'] = None
+        
+        try:
+            tag = Tag.objects.get(name=search_word)
+            search_results['tags_results'] = Project.objects.filter(tags=tag)
+        except Project.DoesNotExist:
+            search_results['tags_results'] = None
+        except Tag.DoesNotExist:
+            search_results['tags_results'] = None
+
+        return render(request, "projects/search.html", {'results':search_results, 'key_word':search_word})
+    else:
+        return render(request, "projects/search.html", {'results':None, 'key_word':'No Keyword entered'})
