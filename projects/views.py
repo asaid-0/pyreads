@@ -142,15 +142,9 @@ def add_comment(request, id):
 def get_category_projects(request, id):
     category = Category.objects.get(id=id)
     projects = category.project_set.all()
-    projects_pics= []
-    for project in projects:
-        project_pic = {}
-        project_pic = project.project_pictures_set.first()
-        projects_pics.append(project_pic)
     context = {
         "projects": projects,
-        "category": category,
-        "projects_pics": projects_pics
+        "category": category
     }
     return render(request, "projects/category_projects.html", context)
 

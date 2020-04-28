@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load my_custom_filters %}
 {% block title %} Home {% endblock %}
 
 <h1>HOME</h1>
@@ -13,35 +13,42 @@
         {% for project in projects %}
         <div class="col-lg-4 col-md-6 col-sm-6">
             <div class="card border-0 shadow mb-4">
+
                 <!-- Card image -->
                 <div class="view">
-                    {% for project_pic in projects_pics %}
-                    {% if project.id == project_pic.project_id%}
-
-                    <img class="card-img-top rounded-top" src="{{project_pic.picture.url}}" alt="Card image cap">
-
+                    {% if project.project_pictures_set.all %}
+                    <img class="card-img-top rounded-top" src="{{ project.id|get_url }}" alt="Card image cap">
+                    {% else %}
+                        <img class="card-img-top rounded-top" src="" alt="No image available">
                     {% endif %}
-                    {% endfor %}
                 </div>
                 <!-- Card content -->
                 <div class="card-body border rounded-bottom">
                     <a href="{% url 'view_project' project.id %}" class="card-title">
                         {{project.title}}
                     </a>
+                    <!-- <hr> -->
+                    <!-- <div class="card-body"> -->
+                    <p class="card-text">{{project.details}}</p>
                     <hr>
-                    <div class="card-body">
-                        <p class="card-text">{{project.details}}</p>
-                        <hr>
-                        <ul class="list-unstyled d-flex justify-content-between text-center">
-                            <li class="pledged">
-                                <p class="font-weight-bold text-dark body-info">Target</p>
-                            </li class="pledged">
-                            <li>
-                                <span class="amount body-figure">${{project.total_target}}</span>
-                            </li>
-                        </ul>
-                    </div>
+                    <ul class="list-unstyled d-flex justify-content-between text-center">
+                        <li class="pledged">
+                            <p class="font-weight-bold text-dark body-info">Target</p>
+                            <span class="amount">${{project.total_target}}</span>
+                        </li>
+                        <li class="pledged">
+                            <p class="font-weight-bold text-dark body-info">Donations</p>
+                            {% if project.donations.all %}
+                            <span class="amount">{{ project.id|get_donations}}</span>
+                            {% else %}
+                            <span class="amount">0</span>
+                            {% endif %}
+                            
+                        </li>
+                    </ul>
+                    <!-- </div> -->
                 </div>
+
             </div>
         </div>
         {% empty %}
