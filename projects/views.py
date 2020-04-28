@@ -212,7 +212,7 @@ def search_by_tag_title(request):
         search_word = request.GET['q']
         search_results = {}
         try:
-            search_results['title_results'] = Project.objects.get(title=search_word)
+            search_results['title_results'] = Project.objects.filter(title=search_word)
         except Project.DoesNotExist:
             search_results['title_results'] = None
         
@@ -223,7 +223,6 @@ def search_by_tag_title(request):
             search_results['tags_results'] = None
         except Tag.DoesNotExist:
             search_results['tags_results'] = None
-
         return render(request, "projects/search.html", {'results':search_results, 'key_word':search_word})
     else:
         return render(request, "projects/search.html", {'results':None, 'key_word':'No Keyword entered'})
