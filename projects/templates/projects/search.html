@@ -7,10 +7,10 @@
 
 <h1>Search results for : {{ key_word }}</h1>
 
-    {% if results.tag_results %}
+    {% if results.tags_results %}
     <h2>By Tag:</h2>
         <ul>
-        {% for project in results.tag_results %}
+        {% for project in results.tags_results %}
             <li><a href="{% url 'view_project' project.id %}">{{project.title}}</a></li>
         {% endfor %}
         </ul>
