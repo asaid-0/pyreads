@@ -48,8 +48,7 @@ class CommentForm(forms.ModelForm):
         widgets = {
             "content": forms.TextInput(
                 attrs={
-                    "class": "form-control",
-                    "style": "border: none; border-radius: 0",
+                    "class": "comment-input",
                     "placeholder": "New Comment....",
                 }
             ),

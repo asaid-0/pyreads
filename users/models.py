@@ -7,6 +7,7 @@ from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from datetime import datetime
 from django_countries.fields import CountryField
+from django.utils import timezone
 
 class CustomUserManager(BaseUserManager):
     def create_user(self ,email, password=None):
@@ -102,6 +103,7 @@ class Comment(models.Model):
     content = models.CharField(max_length=200, null=True)
     user = models.ForeignKey('User', null=True, on_delete=models.CASCADE)
     project = models.ForeignKey('Project', null=True, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(default=timezone.now)
     
     def __str__(self):
         return self.content

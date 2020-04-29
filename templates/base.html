@@ -16,10 +16,11 @@
   <link href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round" rel="stylesheet">
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->
+  <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
   <link rel="stylesheet" href="{% static "projects/styles.css" %}">
+  <link rel="stylesheet" href="{% static "projects/view-project.css" %}">
   <link rel="stylesheet" href="{% static "home/card.css" %}">
   <link rel="stylesheet" href="{% static "home/styles.css" %}">
   <title>{% block title %} library {% endblock %}</title>
@@ -81,7 +82,7 @@
       {% endif %}
   </nav>
 
-  <div class="container">
+  <div class="container mt-4">
     {% block content %}{% endblock %}
   </div>
 

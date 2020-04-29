@@ -50,6 +50,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.facebook',
     "sslserver",
     "django_countries",
+    "mathfilters",
+    
 ]
 
 MIDDLEWARE = [
