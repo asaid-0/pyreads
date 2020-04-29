@@ -5,7 +5,7 @@
 {% block content %}
 
 <div class="container">
-    <a href="{% url 'add_project' %}" class="btn btn-info" role="button">Add project</a>
+    <a href="{% url 'add_project' %}" class="btn btn-primary" role="button">Add project</a>
     <h1> Your Projects</h1>
 
     <!-- Begin Project card -->
@@ -21,7 +21,7 @@
                     {% if project.project_pictures_set.all %}
                     <img class="card-img-top rounded-top" src="{{ project.id|get_url }}" alt="Card image cap">
                     {% else %}
-                        <img class="card-img-top rounded-top" src="" alt="No image available">
+                    <img class="card-img-top rounded-top" src="" alt="No image available">
                     {% endif %}
                 </div>
                 <!-- Card content -->
@@ -31,7 +31,11 @@
                     </a>
                     <!-- <hr> -->
                     <!-- <div class="card-body"> -->
-                    <p class="card-text">{{project.details}}</p>
+                    <p class="card-text">
+                        {% autoescape off %}
+                        {{ project.details |truncatewords_html:8|slice:"-4"}}
+                        {% endautoescape %}
+                    </p>
                     <hr>
                     <ul class="list-unstyled d-flex justify-content-between text-center">
                         <li class="pledged">
@@ -45,7 +49,7 @@
                             {% else %}
                             <span class="amount">0</span>
                             {% endif %}
-                            
+
                         </li>
                     </ul>
                     <!-- </div> -->
