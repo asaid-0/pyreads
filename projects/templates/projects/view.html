@@ -56,16 +56,20 @@
 </div>
 <div class="bg-dark text-white">
     <div class="text-secondary">
-        <p class="card-text"><a href="">{{ project.details }}</a></p>
+        <p class="card-text"><a href="">
+                {% autoescape off %}
+                    {{ project.details }}
+                {% endautoescape %}
+            </a></p>
         <p class="card-text"><a href="">{{ project.start_date }}</a></p>
         <p class="card-text"><a href="">{{ project.end_date }}</a></p>
         <p class="card-text">Current donations: <span id="donations">
-                    {% if project_donations.total_amount %}
-                        {{ project_donations.total_amount }}
-                    {% else %}
-                        0
-                    {% endif %}
-                    </span></p>
+                {% if project_donations.total_amount %}
+                {{ project_donations.total_amount }}
+                {% else %}
+                0
+                {% endif %}
+            </span></p>
         <p class="card-text"><a href="../category/{{ project.category.id }}/projects">{{ project.category.name }}</a>
         </p>
 
@@ -81,14 +85,14 @@
         <div class="alert alert-warning alert-dismissible show" role="alert">
             <strong>{{message}}</strong> Your project donations are Over 25%.
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
+                <span aria-hidden="true">&times;</span>
             </button>
         </div>
         {% endfor %}
         {% endif %}
 
         {% else %}
-        
+
         {% if is_reported %}
         <button type="submit" class="btn btn-success ml-1" disabled>reported!</button>
         {% else %}
@@ -156,21 +160,21 @@
 </form>
 
 <div class="row">
-    
+
     <div class="rating">
         {% for n in rateRange reversed%}
-            {% if n <= rate %}
-                <span id="rate-{{n}}" class="rated">☆</span>
-            {% else %}
-                <span id="rate-{{n}}">☆</span>
-            {% endif %}
+        {% if n <= rate %}
+        <span id="rate-{{n}}" class="rated">☆</span>
+        {% else %}
+        <span id="rate-{{n}}">☆</span>
+        {% endif %}
         {% endfor %}
     </div>
     <span style="position:relative;top:5px;font-size:1.5em" id="current_rating">
         {% if rate %}
-            {{ rate }}
+        {{ rate }}
         {% else %}
-            0
+        0
         {% endif %}
     </span>
 </div>
@@ -180,16 +184,16 @@
 {% endif %}
 
 <div class="text-secondary p-5 m-5">
-<p>Similar Projects: </p>
-{% for similar in similar_projects %}
+    <p>Similar Projects: </p>
+    {% for similar in similar_projects %}
 
-<li>
-    <span><a href="/home/project/{{similar.project.id}}">{{ similar.project }}</a></span>
-    <span>factor: {{ similar.factor }}</span>
+    <li>
+        <span><a href="/home/project/{{similar.project.id}}">{{ similar.project }}</a></span>
+        <span>factor: {{ similar.factor }}</span>
 
-</li>
+    </li>
 
-{% endfor %}
+    {% endfor %}
 
 </div>
 
@@ -222,30 +226,31 @@
         }
     });
 
-    $(document).ready(function(){
+    $(document).ready(function () {
         $('.rating span').click(function (e) {
             e.preventDefault();
             let rate = $(this).attr("id").split("rate-")[1];
-            let project_id = {{project.id}};
-            $.ajax({
-                type: "post",
-                dataType: "json",
-                url: '{% url 'rate' %}',
-                data: {'rate': rate, 'project_id': project_id,  csrfmiddlewaretoken: '{{ csrf_token }}'},
-                success: function (data) {
-                    $("span").removeClass("rated");
-                    for(let i = 1; i <= 5; i++){
-                        if(i <= data.rate){
-                            $("#rate-"+i).addClass("rated");
-                        }
+            let project_id = {{ project.id }
+        };
+        $.ajax({
+            type: "post",
+            dataType: "json",
+            url: '{% url 'rate' %}',
+            data: { 'rate': rate, 'project_id': project_id, csrfmiddlewaretoken: '{{ csrf_token }}' },
+            success: function (data) {
+                $("span").removeClass("rated");
+                for (let i = 1; i <= 5; i++) {
+                    if (i <= data.rate) {
+                        $("#rate-" + i).addClass("rated");
                     }
-                    $("#current_rating").html(data.rate)
-                },
-                error: function (data, textStatus, errorThrown) {
-                    console.log(errorThrown);
                 }
-            });
+                $("#current_rating").html(data.rate)
+            },
+            error: function (data, textStatus, errorThrown) {
+                console.log(errorThrown);
+            }
         });
+    });
     });
 </script>
 {% endblock %}

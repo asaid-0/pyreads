@@ -17,7 +17,7 @@ class AddProjectForm(forms.ModelForm):
         )
         widgets = {
             "tags": forms.TextInput(attrs={"data-role": "tagsinput", "name": "tags"}),
-            "details": forms.Textarea(attrs={"rows": 7, "style": "resize:none;"}),
+            # "details": forms.Textarea(attrs={"rows": 7, "style": "resize:none;"}),
             "start_date": forms.DateInput(attrs={"type": "date"}),
             "end_date": forms.DateInput(attrs={"type": "date"}),
         }

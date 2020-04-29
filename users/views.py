@@ -4,8 +4,9 @@ from django.db.models import Sum, Avg
 from .models import User, Category, Project, Rate, Project_pictures, Donation
 from .forms import UserForm, ConfirmPasswordForm
 from django.shortcuts import redirect
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordChangeForm
 
 # Create your views here.
 
@@ -19,7 +20,7 @@ def home(request):
         .annotate(avg_rate=Avg("rate"))
         .order_by("-avg_rate")[:5]
     )
-    
+
     context = {
         "categories": categories,
         "latest_projects": latest_projects,
@@ -63,6 +64,20 @@ def delete_account(request):
     else:
         password_form = ConfirmPasswordForm(instance=current_user)
     return render(request, "users/delete_account.html", {"form": password_form})
+
+
+@login_required
+def change_password(request):
+    current_user = request.user
+    if request.method == "POST":
+        form = PasswordChangeForm(current_user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            return redirect("profile")
+    else:
+        form = PasswordChangeForm(current_user)
+    return render(request, "users/change_password.html", {"form": form})
 
 
 @login_required

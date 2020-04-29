@@ -35,7 +35,7 @@
                         {% if project.project_pictures_set.all %}
                         <img class="card-img-top rounded-top" src="{{ project.id|get_url }}" alt="Card image cap">
                         {% else %}
-                            <img class="card-img-top rounded-top" src="" alt="No image available">
+                        <img class="card-img-top rounded-top" src="" alt="No image available">
                         {% endif %}
                     </div>
                     <!-- Card content -->
@@ -45,7 +45,11 @@
                         </a>
                         <!-- <hr> -->
                         <!-- <div class="card-body"> -->
-                        <p class="card-text">{{project.details}}</p>
+                        <p class="card-text">
+                            {% autoescape off %}
+                            {{project.details}}
+                            {% endautoescape %}
+                        </p>
                         <hr>
                         <ul class="list-unstyled d-flex justify-content-between text-center">
                             <li class="pledged">
@@ -59,7 +63,7 @@
                                 {% else %}
                                 <span class="amount">0</span>
                                 {% endif %}
-                                
+
                             </li>
                         </ul>
                         <!-- </div> -->
@@ -90,7 +94,7 @@
                         <img class="card-img-top rounded-top" src="{{ project.id|get_url }}" alt="Card image cap">
 
                         {% else %}
-                            <img class="card-img-top rounded-top" src="" alt="No image available">
+                        <img class="card-img-top rounded-top" src="" alt="No image available">
                         {% endif %}
                     </div>
                     <!-- Card content -->
@@ -98,8 +102,12 @@
                         <a href="{% url 'view_project' project.id %}" class="card-title">
                             {{project.title}}
                         </a>
-                        
-                        <p class="card-text">{{project.details}}</p>
+
+                        <p class="card-text">
+                            {% autoescape off %}
+                            {{project.details}}
+                            {% endautoescape %}
+                        </p>
                         <hr>
                         <ul class="list-unstyled d-flex justify-content-between mb-3 text-center small">
                             <li class="pledged">
@@ -115,7 +123,7 @@
                                 {% endif %}
                             </li>
                         </ul>
-                     
+
                     </div>
                 </div>
             </div>
