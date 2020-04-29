@@ -22,7 +22,6 @@
   <link rel="stylesheet" href="{% static "projects/styles.css" %}">
   <link rel="stylesheet" href="{% static "home/card.css" %}">
   <link rel="stylesheet" href="{% static "home/styles.css" %}">
-  <!-- <link rel="stylesheet" href="{% static "home/navbar.css" %}"> -->
 
   <title>{% block title %} library {% endblock %}</title>
   {% block style %}{% endblock %}
@@ -30,22 +29,7 @@
 </head>
 
 <body>
-
-
-
-  <!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Navbar</title>
-</head>
-
-<body>
-
-
-    <nav class="navbar navbar-inverse navbar-expand-md navbar-dark">
+    <nav class="navbar navbar-expand-md navbar-dark">
         <div class="navbar-header d-flex col">
             <a class="navbar-brand" href="{% url 'home' %}"><i class="fa fa-cube"></i>PY<b>Fund</b></a>
             <button type="button" data-target="#navbarCollapse" data-toggle="collapse"
@@ -103,22 +87,8 @@
     </nav>
 
 
-
-
-
-
-</body>
-
-</html>
-
-
-
-
-
   <div class="container-fluid">
-    <div class="container" style="padding-top: 10rem;">
       {% block content %}{% endblock %}
-    </div>
   </div>
 
   <div class="container my-5">
