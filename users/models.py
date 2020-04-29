@@ -7,6 +7,7 @@ from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from datetime import datetime
 from django_countries.fields import CountryField
+from tinymce.models import HTMLField
 
 class CustomUserManager(BaseUserManager):
     def create_user(self ,email, password=None):
@@ -77,7 +78,7 @@ class Category(models.Model):
 
 class Project(models.Model) :
     title = models.CharField(max_length=70, null=True)
-    details = models.CharField(max_length=150, null=True, blank=True)
+    details = HTMLField(null=True)
     total_target = models.FloatField(null=True, blank=True)
     start_date = models.DateField(null= True, blank=True)
     end_date = models.DateField(null=True, blank=True)

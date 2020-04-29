@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'register',
     'projects',
     'taggit',
+    'tinymce',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
