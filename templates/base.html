@@ -24,7 +24,6 @@
   <link rel="stylesheet" href="{% static "projects/styles.css" %}">
   <link rel="stylesheet" href="{% static "home/card.css" %}">
   <link rel="stylesheet" href="{% static "home/styles.css" %}">
-  <link rel="stylesheet" href="{% static "home/navbar.css" %}">
 
   <title>{% block title %} library {% endblock %}</title>
   {% block style %}{% endblock %}
@@ -32,44 +31,66 @@
 </head>
 
 <body>
-
-
-
-  <header class="header">
-    <a href="{% url 'home' %}" class="logo"><i class="fa fa-cube"></i>PY<b>Fund</b></a>
-    <form id="searchForm" class="navbar-form form-inline" action="{% url 'search' %}" method="GET">
-      <input type="text" id="search" name="q" class="form-control" placeholder="Search here...">
-      <button class="btn" id="searchBox" type="submit"><i class="fa fa-search search-icon"></i></button>
-    </form>
-    <input class="menu-btn" type="checkbox" id="menu-btn" />
-    <label class="menu-icon" for="menu-btn"><span class="navicon"></span></label>
-    <ul class="menu">
-      <li><a href="{% url 'home' %}"><i class="fa fa-home"> </i>Home</a></li>
-      <li><a href="{% url 'user_projects'  %}"><i class="fa fa-gears"></i> Projects</a></li>
-      <li><a href="{% url 'user_donations' %}"><i class="fa fa-pie-chart"></i> Donations</a></li>
-      <li>
-        <a href="#" data-toggle="dropdown" class="nav-link user-action prof-text"><img class="prof-img"
-            src="../..{{ user.profile_picture.url }}" class="avatar" alt="Avatar"> {{user.first_name}}
-          {{ user.last_name }} <b class="caret"></b></a>
-        <ul class="dropdown-menu">
-          <li><a href="{% url 'profile' %}" class="dropdown-item"><i class="fa fa-user-o"></i> Profile</a></li>
-          <li class="divider dropdown-divider"></li>
-          <li><a href="{% url 'logout' %}" class="dropdown-item"><i class="material-icons">&#xE8AC;</i> Logout</a>
-          </li>
-        </ul>
-      </li>
-    </ul>
-  </header>
-
-
-
-
+    <nav class="navbar navbar-expand-md navbar-dark">
+        <div class="navbar-header d-flex col">
+            <a class="navbar-brand" href="{% url 'home' %}"><i class="fa fa-cube"></i>PY<b>Fund</b></a>
+            <button type="button" data-target="#navbarCollapse" data-toggle="collapse"
+                class="navbar-toggle navbar-toggler ml-auto">
+                <span class="navbar-toggler-icon"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        {% if user.is_authenticated %}
+        <!-- Collection of nav links, forms, and other content for toggling -->
+        <div id="navbarCollapse" class="collapse navbar-collapse justify-content-start">
+            <form id="searchForm" class="navbar-form form-inline" action="{% url 'search' %}" method="GET">
+                <div class="input-group search-box">
+                    <input type="text" id="search" name="q" class="form-control" placeholder="Search here...">
+                    <button class="input-group-addon" id="searchBox" type="submit"><i
+                            class="material-icons">&#xE8B6;</i></button>
+                </div>
+            </form>
+            <ul class="nav navbar-nav navbar-right ml-auto">
+                <li class="nav-item active"><a href="{% url 'home' %}" class="nav-link"><i
+                            class="fa fa-home"></i><span>Home</span></a></li>
+                <li class="nav-item"><a href="{% url 'user_projects'  %}" class="nav-link"><i
+                            class="fa fa-gears"></i><span>Projects</span></a></li>
+                <li class="nav-item"><a href="{% url 'profile' %}" class="nav-link"><i
+                            class="fa fa-user"></i><span>Profile</span></a></li>
+                <li class="nav-item"><a href="{% url 'user_donations' %}" class="nav-link"><i
+                            class="fa fa-pie-chart"></i><span>Donations</span></a></li>
+                <li class="nav-item dropdown">
+                    <a href="#" data-toggle="dropdown" class="nav-link  user-action"><img
+                            src="../..{{ user.profile_picture.url }}" class="avatar" alt="Avatar"> {{user.first_name}}
+                        {{ user.last_name }} <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{% url 'profile' %}" class="dropdown-item"><i class="fa fa-user-o"></i> Profile</a>
+                        </li>
+                        <li class="divider dropdown-divider"></li>
+                        <li><a href="{% url 'logout' %}" class="dropdown-item"><i class="material-icons">&#xE8AC;</i>
+                                Logout</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        {% else %}
+        <a class="btn btn-outline-primary" href="{% url 'login' %}" role="button">
+            Login
+        </a>
+        <div style="padding-left: 10px;">
+            <a class="btn btn-outline-success" href="{% url 'register' %}" role="button">
+                Sign Up
+            </a>
+        </div>
+        {% endif %}
+    </nav>
 
 
   <div class="container-fluid">
-    <div class="container" style="padding-top: 10rem;">
       {% block content %}{% endblock %}
-    </div>
   </div>
 
   <div class="container my-5">
