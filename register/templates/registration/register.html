@@ -106,7 +106,7 @@
 {% block content %}
 {% load crispy_forms_tags %}
 {% load socialaccount %}
-
+<div class="container">
       <h1>Sign Up</h1>
 		<p class="hint-text">Sign up with your social media account or email address</p>
 		<div class="social-btn text-center justify-content-center">
@@ -120,4 +120,5 @@
         <input type="submit" value="Registeration">
       </form>
       <div class="text-center">Already have an account? <a href="{% url 'login' %}">Login here</a> </div>
+</div>
 {% endblock %}

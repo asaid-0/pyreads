@@ -14,10 +14,10 @@ def home(request):
     categories = Category.objects.all()
     projects = Project.objects.all()
     latest_projects = Project.objects.all().order_by("-id")[:5]
+    featured_projects = Project.objects.filter(is_featured = True).order_by("-featuring_date")[:5]
+
     high_rated_set = (
-        Rate.objects.values("project_id")
-        .annotate(avg_rate=Avg("rate"))
-        .order_by("-avg_rate")[:5]
+        Rate.objects.values("project_id").annotate(avg_rate=Avg("rate")).order_by("-avg_rate")[:5]
     )
     
     context = {
@@ -25,6 +25,8 @@ def home(request):
         "latest_projects": latest_projects,
         "high_rated_set": high_rated_set,
         "projects": projects,
+        "featured_projects":featured_projects,
+        "range": range(featured_projects.count())
     }
     return render(request, "users/home.html", context)
 
