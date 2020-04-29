@@ -5,7 +5,7 @@
 {% block content %}
 
 <div class="container">
-    <a href="{% url 'add_project' %}" class="btn btn-info" role="button">Add project</a>
+    <a href="{% url 'add_project' %}" class="btn btn-primary" role="button">Add project</a>
     <h1> Your Projects</h1>
 
     <!-- Begin Project card -->
@@ -33,7 +33,7 @@
                     <!-- <div class="card-body"> -->
                     <p class="card-text">
                         {% autoescape off %}
-                        {{ project.details }}
+                        {{ project.details |truncatewords_html:8|slice:"-4"}}
                         {% endautoescape %}
                     </p>
                     <hr>

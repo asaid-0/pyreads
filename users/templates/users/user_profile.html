@@ -7,6 +7,7 @@
         border-radius: 2.5rem;
         width: 20rem;
         margin-top: 7rem;
+        margin-left: 5rem;
         padding: 1%;
         font-weight: 600;
         cursor: pointer;
@@ -103,15 +104,18 @@
                                     <label><i class="fa fa-facebook"></i> Facebook</label>
                                 </div>
                                 <div class="col-md-6">
+                                    {% if user.facebook_account %}
+                                    <a href="{{ user.facebook_account }}">{{ user.facebook_account }}</a>
+                                    {% else %}
                                     <p>{{ user.facebook_account }}</p>
+                                    {% endif %}
                                 </div>
                             </div>
+                            <hr>
                             <div class="row">
                                 <div class="col-md-6">
-                                    <label>Password</label>
-                                </div>
-                                <div class="col-md-6">
-                                    <p><a href="{% url 'change_password' %}">Change password</a></p>
+                                    <i class="fa fa-key"></i>
+                                    <a href="{% url 'change_password' %}" class="">Change password</a>
                                 </div>
                             </div>
                     </div>
