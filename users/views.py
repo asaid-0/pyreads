@@ -11,7 +11,6 @@ from django.contrib.auth.decorators import login_required
 
 
 def home(request):
-    categories = Category.objects.all()
     projects = Project.objects.all()
     latest_projects = Project.objects.all().order_by("-id")[:5]
     high_rated_set = (
@@ -21,12 +20,20 @@ def home(request):
     )
     
     context = {
-        "categories": categories,
         "latest_projects": latest_projects,
         "high_rated_set": high_rated_set,
         "projects": projects,
     }
     return render(request, "users/home.html", context)
+
+@login_required
+def get_categories(request):
+    categories = Category.objects.all()
+    context = {
+        "categories": categories,
+    }
+    return render(request, "users/categories.html", context)
+
 
 
 @login_required

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container d-flex justify-content-around flex-wrap">
+    <!-- <h1> Categories </h1> -->
+  
+    <!-- <div class="row"> -->
+        
+        {% for category in categories %}
+            <a href="{% url 'category_projects' category.id %}" class="category-link"> {{ category.name }} </a>
+        {% empty %}
+        <h2>Sorry, There are no categories.</h2>
+        {% endfor %}
+    
+    <!-- </div> -->
+
+</div>
+
+{% endblock %}

@@ -22,6 +22,34 @@
     background-size: cover;
   }
 
-  .container-fluid {
+.container-fluid {
     padding: 0px;
+}
+
+.category-link{
+    margin-top: 7rem;
+    background-color: #7289da;
+    border: 2px solid #2c2f33;
+    border-radius: 1rem;
+    color: #FFFFFF;
+    padding: 15px 32px;
+    text-align: center;
+    -webkit-transition-duration: 0.4s;
+    transition-duration: 0.4s;
+    text-decoration: none;
+    font-size: 4rem;
+    cursor: pointer;
+    text-transform: uppercase;
+
+}
+.category-link:hover {
+        background-color: #201C29;
+        border: none;
+        text-decoration: none;
+        color: #7289da;
+}
+.link-pool{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
 }
