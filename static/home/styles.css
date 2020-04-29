@@ -25,7 +25,10 @@
   .container-fluid {
     padding: 0px;
 }
-
+.carousel-control-prev, .carousel-control-next {
+    height: 70vh;
+    margin-top: 100px !important;
+}
 .container {
     margin-top: 30px !important;
 }
