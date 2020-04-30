@@ -12,7 +12,6 @@ from django.contrib.auth.forms import PasswordChangeForm
 
 
 def home(request):
-    categories = Category.objects.all()
     projects = Project.objects.all()
     latest_projects = Project.objects.all().order_by("-id")[:5]
     featured_projects = Project.objects.filter(is_featured = True).order_by("-featuring_date")[:5]
@@ -22,7 +21,6 @@ def home(request):
     )
 
     context = {
-        "categories": categories,
         "latest_projects": latest_projects,
         "high_rated_set": high_rated_set,
         "projects": projects,
@@ -30,6 +28,15 @@ def home(request):
         "range": range(featured_projects.count())
     }
     return render(request, "users/home.html", context)
+
+@login_required
+def get_categories(request):
+    categories = Category.objects.all()
+    context = {
+        "categories": categories,
+    }
+    return render(request, "users/categories.html", context)
+
 
 
 @login_required
