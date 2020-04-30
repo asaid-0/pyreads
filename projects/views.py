@@ -23,7 +23,7 @@ def similar_projects(current_project):
             similar_projects.append({"factor": similarity_factor, "project": project})
     return sorted(similar_projects, key=lambda p: p['factor'], reverse=True)[:4]
 
-@login_required
+@login_required(login_url='/accounts/login/')
 def add_project(request):
     current_user = request.user
     if request.method == "POST":
@@ -46,7 +46,7 @@ def add_project(request):
     )
 
 
-@login_required
+@login_required(login_url='/accounts/login/')
 def view_project(request, id, form=CommentForm()):
     global comment_form
     global reply_form
@@ -74,7 +74,7 @@ def view_project(request, id, form=CommentForm()):
     return render(request, "projects/view.html", context)
 
 
-@login_required
+@login_required(login_url='/accounts/login/')
 def delete_project(request, id):
     if request.method == "POST":
         project = Project.objects.filter(id=id)
@@ -97,7 +97,7 @@ def delete_project(request, id):
     return redirect("user_projects")
 
 
-@login_required
+@login_required(login_url='/accounts/login/')
 def report_comment(request, id):
     if request.method == "POST":
         comment = Comment.objects.filter(id=id)
@@ -109,7 +109,7 @@ def report_comment(request, id):
     return redirect("home")
 
 
-@login_required
+@login_required(login_url='/accounts/login/')
 def delete_comment(request, id):
     if request.method == "POST":
         comment = Comment.objects.filter(id=id)
@@ -122,7 +122,7 @@ def delete_comment(request, id):
     return redirect("home")
     
 
-@login_required
+@login_required(login_url='/accounts/login/')
 def report_project(request, id):
     if request.method == "POST":
         project = Project.objects.filter(id=id)
@@ -135,7 +135,7 @@ def report_project(request, id):
     
 
 
-@login_required
+@login_required(login_url='/accounts/login/')
 def add_comment(request, id):
     global comment_form
     comment_form = CommentForm(request.POST)
@@ -158,7 +158,7 @@ def add_comment(request, id):
         return redirect("view_project", id=project.first().id)
 
 
-@login_required
+@login_required(login_url='/accounts/login/')
 def add_reply(request, id):
     global reply_form
     reply_form = ReplyForm(request.POST)
@@ -192,7 +192,7 @@ def get_category_projects(request, id):
     }
     return render(request, "projects/category_projects.html", context)
 
-@login_required
+@login_required(login_url='/accounts/login/')
 def add_donation(request):
     if request.is_ajax and request.method == 'POST':
         #save donation 
@@ -219,7 +219,7 @@ def add_donation(request):
         return HttpResponse(json.dumps({'error': "Something went wrong"}), content_type="application/json", status=400)
 
 
-@login_required
+@login_required(login_url='/accounts/login/')
 def add_rate(request):
     if request.is_ajax and request.method == 'POST':
         #save rate 

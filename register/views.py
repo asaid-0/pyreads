@@ -12,10 +12,12 @@ from .forms import CustomUserCreationForm
 from django.contrib.auth import get_user_model
 from users.models import User
 from django.contrib import messages
-
+from django.http import HttpResponseRedirect
 
 # Create your views here.
 def register(request):
+    if request.user.is_authenticated:
+        return HttpResponseRedirect('/home')
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST, request.FILES)
         if form.is_valid():
