@@ -93,7 +93,11 @@
 
                     <span style="float: right">
                         {% if comment.user == user %}
-                        <a class="btn btn-danger ml-1" href="/comments/1/delete">x</a>
+                        <form action="{% url 'delete_comment' comment.id %}" method="POST">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger ml-1 fa fa-remove"></button>
+                        </form>
+                        <!-- <a class="btn btn-danger ml-1 fa fa-remove" href="/comments/1/delete"></a> -->
                         {% else %}
                         {% if not comment.id in reported_comments %}
                         <form action="{% url 'report_comment' comment.id %}" method="POST">
@@ -134,7 +138,7 @@
                             </form>
 
                             {% for reply in comment.reply_set.all %}
-                                <div class="card card-body">
+                                <div class="card card-body mt-2">
                                     <span class="fa fa-user"> {{ reply.user }}</span>
                                     <p>{{ reply }}</p>
                                 </div>

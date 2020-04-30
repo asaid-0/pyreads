@@ -107,6 +107,19 @@ def report_comment(request, id):
                 request.user.comment_reports.add(comment)
             return redirect("view_project", id=comment.project_id)
     return redirect("home")
+
+
+@login_required
+def delete_comment(request, id):
+    if request.method == "POST":
+        comment = Comment.objects.filter(id=id)
+        if comment.exists():
+            comment = comment.first()
+            project_id = comment.project_id
+            if comment.user == request.user:
+                comment.delete()
+            return redirect("view_project", id=project_id)
+    return redirect("home")
     
 
 @login_required

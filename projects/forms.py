@@ -64,7 +64,7 @@ class ReplyForm(forms.ModelForm):
         widgets = {
             "content": forms.TextInput(
                 attrs={
-                    "class": "comment-input w-100 mb-4",
+                    "class": "comment-input w-100",
                     "placeholder": "Add reply....",
                 }
             ),
