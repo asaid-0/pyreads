@@ -219,7 +219,7 @@
                 <p><strong>Started at:</strong> {{ project.start_date|date:"D, j F, Y" }}</p>
             </div>
             <div class="row">
-                <p><strong>End date:</strong> {{ project.start_date|date:"D, j F, Y" }}</p>
+                <p><strong>End date:</strong> {{ project.end_date|date:"D, j F, Y" }}</p>
             </div>
 
             <div class="row">
@@ -365,8 +365,8 @@
                     }
                     $("#current_rating").html(data.rate)
                 },
-                error: function (data, textStatus, errorThrown) {
-                    console.log(errorThrown);
+                error: function (response) {
+                    alert(response.responseJSON.error)
                 }
             });
         });
