@@ -32,9 +32,12 @@ class AddProjectForm(forms.ModelForm):
         if end_date <= start_date:
             msg = "End date should be greater than start date."
             self.add_error("end_date", msg)
-        elif end_date < datetime.date.today() or end_date == datetime.date.today():
+        if end_date < datetime.date.today() or end_date == datetime.date.today():
             msg = "End date should be greater than today date."
             self.add_error("end_date", msg)
+        if start_date < datetime.date.today():
+            msg = "Start date should be greater than today date."
+            self.add_error("start_date", msg)
 
 class ImageForm(forms.ModelForm):
     class Meta:
