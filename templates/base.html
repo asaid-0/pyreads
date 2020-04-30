@@ -66,7 +66,7 @@
         <li class="nav-item dropdown">
           <a href="#" data-toggle="dropdown" class="nav-link  user-action">
             {% if user.profile_picture %}
-            <img src="../..{{ user.profile_picture.url }}" class="avatar" alt="Avatar"> {{user.first_name}}
+            <img src="../..{{ user.profile_picture.url }}" class="avatar" alt="Avatar">
             {% else %}
             <img src="{{ user.socialaccount_set.all.0.get_avatar_url }}" class="avatar" alt="Avatar">
             {% endif %}
