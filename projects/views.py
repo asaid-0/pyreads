@@ -7,6 +7,7 @@ from users.models import Project, Comment, Category, Donation, Project_pictures,
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from datetime import date
 import json
 
 comment_form = CommentForm()
@@ -201,6 +202,9 @@ def add_donation(request):
                 project_id = request.POST['project_id']
                 project = Project.objects.get(id=project_id)
 
+                if project.start_date > date.today():
+                    return HttpResponse(json.dumps({'error': "you can't rate project because it hasn't started yet"}), content_type="application/json", status=403)
+
                 donation = Donation()
                 donation.user = request.user
                 donation.amount = request.POST['amount']
@@ -228,6 +232,8 @@ def add_rate(request):
             recieved_rate = request.POST['rate']
             try:
                 project = Project.objects.get(id=project_id)
+                if project.start_date > date.today():
+                    return HttpResponse(json.dumps({'error': "you can't rate project because it hasn't started yet"}), content_type="application/json", status=403)
                 # check if rated already with current user
                 try:
                     rate = Rate.objects.get(user=request.user, project=project)
