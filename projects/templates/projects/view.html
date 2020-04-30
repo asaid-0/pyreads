@@ -45,7 +45,7 @@
             
         </div>
 
-        <div id="image-slider" class="carousel slide mb-4" data-ride="carousel">
+        <div id="image-slider" class="shadow-lg carousel slide mb-4" data-ride="carousel">
             <ol class="carousel-indicators">
                 {% for i in range %}
                 <li data-target="#image-slider" data-slide-to="{{i}}" class="active"></li>
@@ -91,7 +91,14 @@
             <div class="row">
                 <section class="comments">
 
-                    <span style="float: right">
+
+                    <div class="thumbnail cf">
+                      <img src="{{ comment.user.profile_picture.url }}" alt="" />
+                    </div>
+                    <div style="position: relative;" class="comment-contents">
+
+                      <a href="#" class="comment-author" title="Comment Author"><h2>{{ comment.user }}</h2></a>
+                      <span style="position: absolute; top: 0.5rem; right: 0.5rem;">
                         {% if comment.user == user %}
                         <form action="{% url 'delete_comment' comment.id %}" method="POST">
                             {% csrf_token %}
@@ -113,11 +120,6 @@
     
                     </span>
 
-                    <div class="thumbnail cf">
-                      <img src="{{ comment.user.profile_picture.url }}" alt="" />
-                    </div>
-                    <div class="comment-contents">
-                      <a href="#" class="comment-author" title="Comment Author"><h2>{{ comment.user }}</h2></a>
                       <p>{{ comment }}</p>
                       <div class="comment-infos">
                         <div class="comment-date">

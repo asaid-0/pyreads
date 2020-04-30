@@ -1,3 +1,8 @@
+body {
+    background-color: #f1f1f1;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
 .l-container{
     background-color: #2c2f33;
     /* background-color: blue; */
