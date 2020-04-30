@@ -1,6 +1,5 @@
 from django import forms
 from users.models import Project, Project_pictures, Comment, Donation, Reply
-from django.utils.translation import ugettext_lazy as _
 import datetime
 
 class AddProjectForm(forms.ModelForm):
@@ -15,6 +14,11 @@ class AddProjectForm(forms.ModelForm):
             "category",
             "tags",
         )
+        error_messages = {
+            'total_target': {
+                'min_value': "Invalid value, target must be greater than zero",
+            },
+        }
         widgets = {
             "tags": forms.TextInput(attrs={"data-role": "tagsinput", "name": "tags"}),
             "start_date": forms.DateInput(attrs={"type": "date"}),

@@ -9,6 +9,7 @@ from datetime import datetime
 from django_countries.fields import CountryField
 from django.utils import timezone
 from tinymce.models import HTMLField
+from django.core.validators import MinValueValidator
 
 class CustomUserManager(BaseUserManager):
     def create_user(self ,email, password=None):
@@ -80,7 +81,7 @@ class Category(models.Model):
 class Project(models.Model) :
     title = models.CharField(max_length=70, null=True)
     details = HTMLField(null=True)
-    total_target = models.FloatField(null=True, blank=True)
+    total_target = models.FloatField(null=True, validators = [MinValueValidator(0.1)])
     start_date = models.DateField(null= True, blank=True)
     end_date = models.DateField(null=True, blank=True)
     category = models.ForeignKey('Category', null=True, on_delete=models.CASCADE)
