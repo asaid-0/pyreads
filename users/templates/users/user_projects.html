@@ -33,7 +33,7 @@
                     <!-- <div class="card-body"> -->
                     <p class="card-text">
                         {% autoescape off %}
-                        {{ project.details |truncatechars:150}}
+                        {{ project.details |truncatechars:150|striptags}}
                         {% endautoescape %}
                     </p>
                     <hr>

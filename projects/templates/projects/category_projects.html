@@ -29,7 +29,7 @@
                     </a>
                     <!-- <hr> -->
                     <!-- <div class="card-body"> -->
-                    <p class="card-text">{{project.details}}</p>
+                    <p class="card-text">{{project.details|truncatechars:150|striptags}}</p>
                     <hr>
                     <ul class="list-unstyled d-flex justify-content-between text-center">
                         <li class="pledged">
