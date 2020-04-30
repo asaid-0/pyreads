@@ -109,6 +109,15 @@ class Comment(models.Model):
     def __str__(self):
         return self.content
 
+class Reply(models.Model):
+    content = models.CharField(max_length=200, null=True)
+    user = models.ForeignKey('User', null=True, on_delete=models.CASCADE)
+    comment = models.ForeignKey('Comment', null=True, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(default=timezone.now)
+    
+    def __str__(self):
+        return self.content
+
 class Rate(models.Model):
     user= models.ForeignKey('User', null=True, on_delete=models.CASCADE)
     project = models.ForeignKey('Project', null=True, on_delete=models.CASCADE)

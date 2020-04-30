@@ -14,25 +14,35 @@
     
     
     <div style="position: relative;" id="content" class="col-md-8">
-        <h1 class="project-title mb-5">{{ project.title }}</h1>
-        <div style="position: absolute; top: 1rem; right: 1rem" class="row">
+        <div class="row">
 
-            <div class="rating">
-                {% for n in rateRange reversed%}
-                {% if n <= rate %}
-                <span id="rate-{{n}}" class="rated">☆</span>
-                {% else %}
-                <span id="rate-{{n}}">☆</span>
-                {% endif %}
-                {% endfor %}
+            <div>
+                <h1 class="project-title mb-5">{{ project.title }}</h1>
+    
             </div>
-            <span style="position:relative;" id="current_rating">
-                {% if rate %}
-                {{ rate }}
-                {% else %}
-                0
-                {% endif %}
-            </span>
+
+            <div class="ml-auto">
+
+                <div style="display: inline-block" class="rating">
+                    {% for n in rateRange reversed%}
+                    {% if n <= rate %}
+                    <span id="rate-{{n}}" class="rated">☆</span>
+                    {% else %}
+                    <span id="rate-{{n}}">☆</span>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                <span style="display: inline;" id="current_rating">
+                    {% if rate %}
+                    {{ rate }}
+                    {% else %}
+                    0
+                    {% endif %}
+                </span>
+
+            </div>
+
+            
         </div>
 
         <div id="image-slider" class="carousel slide mb-4" data-ride="carousel">
@@ -78,34 +88,6 @@
 
             {% for comment in project.comment_set.all %}
 
-            <!-- <div style="position: relative" class="p-3">
-
-                <span style="float: right">
-                    {% if comment.user == user %}
-                    <a class="btn btn-danger ml-1" href="/comments/1/delete">x</a>
-                    {% else %}
-                    {% if not comment.id in reported_comments %}
-                    <form action="{% url 'report_comment' comment.id %}" method="POST">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-danger ml-1">report</button>
-                    </form>
-                    {% else %}
-                    <button type="submit" class="btn btn-success ml-1" disabled>reported!</button>
-
-                    {% endif %}
-
-                    {% endif %}
-
-                </span>
-
-                <span>
-                    <i class="fa fa-user text-secondary">{{ comment.user }}</i> <br />
-                    {{ comment }}
-                </span>
-
-            </div> -->
-
-
             <div class="row">
                 <section class="comments">
 
@@ -138,18 +120,25 @@
                             {{ comment.created_at }}
                         </div>
                         <div class="comment-reply">
-                          <a href="#" class="reply" title="Add a Reply" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" >12 replies</a>
+                          <a href="#" class="reply" title="Add a Reply" data-toggle="collapse" data-target="#replyCollapse_{{ comment.id }}" aria-expanded="false" >{{ comment.reply_set.count }} {% if comment.reply_set.count > 1 %}replies{% else %}reply{% endif %}</a>
                         </div>
                       </div>
 
 
-                      <div class="collapse" id="collapseExample">
+                      <div class="collapse" id="replyCollapse_{{ comment.id }}">
                         <div class="shadow-sm">
-                            <input class="comment-input w-100 mb-4" placeholder="Add reply" />
-                            <div class="card card-body">
-                                <span class="fa fa-user"> Ahmed</span>
-                                <p>ASDFVsd vsdvsdvsdv knas</p>
-                            </div>
+                            <form style="position: relative;" action="/home/project/{{ comment.id }}/reply" accept-charset="UTF-8"
+                                method="post">
+                                {% csrf_token %}
+                                {{ reply_form|crispy }}
+                            </form>
+
+                            {% for reply in comment.reply_set.all %}
+                                <div class="card card-body">
+                                    <span class="fa fa-user"> {{ reply.user }}</span>
+                                    <p>{{ reply }}</p>
+                                </div>
+                            {% endfor %}
                         </div>
                       </div>
 
@@ -164,23 +153,6 @@
 
 
             {% endfor %}
-
-        
-        
-        <!-- <form id="addDonation" accept-charset="UTF-8" method="POST">
-            {% csrf_token %}
-            <div class="row">
-                <div class="col-9">
-                    <input type="hidden" name="project_id" value="{{project.id}}">
-                    {{donation_form|crispy}}
-                </div>
-                <div class="col-3">
-                    <button type="submit" class="btn btn-primary">Add</button>
-                </div>
-            </div>
-        </form> -->
-
-
 
         <div class="modal fade" id="donateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -203,7 +175,7 @@
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <button type="button" onclick="$('#addDonation').submit()" data-dismiss="modal" class="btn btn-primary">Add</button>
+                  <button type="button" onclick="$('#addDonation').submit()" class="btn btn-primary">Add</button>
                 </div>
               </div>
             </div>
@@ -356,6 +328,7 @@
                     
                     let alert = '<div class="alert alert-success alert-dismissible show" role="alert"><strong>Thanks!</strong> Your donation has been added<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>';
                     $('#content').prepend(alert);
+                    $("[data-dismiss=modal]").trigger({ type: "click" });
 
                 },
                 error: function (response) {

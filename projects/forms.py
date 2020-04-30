@@ -1,5 +1,5 @@
 from django import forms
-from users.models import Project, Project_pictures, Comment, Donation
+from users.models import Project, Project_pictures, Comment, Donation, Reply
 from django.utils.translation import ugettext_lazy as _
 import datetime
 
@@ -52,6 +52,20 @@ class CommentForm(forms.ModelForm):
                 attrs={
                     "class": "comment-input",
                     "placeholder": "New Comment....",
+                }
+            ),
+        }
+
+class ReplyForm(forms.ModelForm):
+    class Meta:
+        model = Reply
+        fields = ("content",)
+        labels = {"content": ""}
+        widgets = {
+            "content": forms.TextInput(
+                attrs={
+                    "class": "comment-input w-100 mb-4",
+                    "placeholder": "Add reply....",
                 }
             ),
         }

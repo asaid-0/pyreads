@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .forms import AddProjectForm, ImageForm, CommentForm, DonateForm
+from .forms import AddProjectForm, ImageForm, CommentForm, DonateForm, ReplyForm
 from django.shortcuts import redirect
 from django.db.models import Sum, Avg
 from taggit.models import Tag
@@ -10,6 +10,7 @@ from django.contrib import messages
 import json
 
 comment_form = CommentForm()
+reply_form = ReplyForm()
 
 def similar_projects(current_project):
     # i know i can simply return curent_project.tags.similar_objects()
@@ -48,6 +49,7 @@ def add_project(request):
 @login_required
 def view_project(request, id, form=CommentForm()):
     global comment_form
+    global reply_form
     project = Project.objects.get(id=int(id))
     pics = Pics.objects.filter(project=project)
     project_donations = project.donation_set.aggregate(total_amount=Sum('amount'))
@@ -65,6 +67,7 @@ def view_project(request, id, form=CommentForm()):
                 "rateRange": range(1,6),
                 "pics": pics,
                 "form": comment_form,
+                "reply_form": reply_form,
                 "donation_form": DonateForm()
             }
         
@@ -116,6 +119,7 @@ def report_project(request, id):
                 request.user.project_reports.add(project)
             return redirect("view_project", id=project.id)
     return redirect("home")
+    
 
 
 @login_required
@@ -135,9 +139,35 @@ def add_comment(request, id):
         create_comment.user = user
         create_comment.project = project.first()
         create_comment.save()
+        comment_form = CommentForm()
         return redirect("view_project", id=project.first().id)
     else:
         return redirect("view_project", id=project.first().id)
+
+
+@login_required
+def add_reply(request, id):
+    global reply_form
+    reply_form = ReplyForm(request.POST)
+    comment = Comment.objects.filter(id=int(id))
+    if not (comment.exists() and request.user.is_authenticated):
+        return redirect("home")
+
+    if request.method.lower() == "get":
+        return redirect("view_project", id=comment.first().project.id)
+
+
+    if reply_form.is_valid():
+        user = request.user
+        create_reply = reply_form.save(commit=False)
+        create_reply.user = user
+        create_reply.comment = comment.first()
+        create_reply.save()
+        reply_form = ReplyForm()
+        return redirect("view_project", id=comment.first().project.id)
+    else:
+        return redirect("view_project", id=comment.first().project.id)
+
 
 @login_required
 def get_category_projects(request, id):
