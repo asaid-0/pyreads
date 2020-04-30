@@ -1,7 +1,7 @@
 from django import forms
 from users.models import Project, Project_pictures, Comment, Donation
 from django.utils.translation import ugettext_lazy as _
-
+import datetime
 
 class AddProjectForm(forms.ModelForm):
     class Meta:
@@ -17,7 +17,6 @@ class AddProjectForm(forms.ModelForm):
         )
         widgets = {
             "tags": forms.TextInput(attrs={"data-role": "tagsinput", "name": "tags"}),
-            "details": forms.Textarea(attrs={"rows": 7, "style": "resize:none;"}),
             "start_date": forms.DateInput(attrs={"type": "date"}),
             "end_date": forms.DateInput(attrs={"type": "date"}),
         }
@@ -28,6 +27,9 @@ class AddProjectForm(forms.ModelForm):
         end_date = cleaned_data.get("end_date")
         if end_date <= start_date:
             msg = "End date should be greater than start date."
+            self.add_error("end_date", msg)
+        elif end_date < datetime.date.today() or end_date == datetime.date.today():
+            msg = "End date should be greater than today date."
             self.add_error("end_date", msg)
 
 class ImageForm(forms.ModelForm):

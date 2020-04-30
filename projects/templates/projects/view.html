@@ -9,10 +9,12 @@
 
 {% if project %}
 {% load mathfilters %}
-<h1 class="project-title mb-5">{{ project.title }}</h1>
+<div class="container">
 <div class="row">
-
+    
+    
     <div id="content" class="col-md-8">
+        <h1 class="project-title mb-5">{{ project.title }}</h1>
 
         <div id="image-slider" class="carousel slide mb-4" data-ride="carousel">
             <ol class="carousel-indicators">
@@ -167,6 +169,10 @@
             </div>
           </div>
 
+
+
+
+
         {% else %}
         <h5 class="text-secondary"> no project found matching your id </h5>
         {% endif %}
@@ -251,29 +257,29 @@
         <div class="text-secondary p-5 m-5">
             <p>Similar Projects: </p>
 
-            <div class="d-flex flex-row justify-content-between ">
+            <div class="d-flex flex-row justify-content-between align-items-start">
             {% for similar in similar_projects %}
 
     
-            <li class="similar-project"></li>
+            
                 <!-- <span><a href="/home/project/{{similar.project.id}}">{{ similar.project }}</a></span>
                 <span>factor: {{ similar.factor }}</span> -->
                 
-                <div class="shadow-sm mb-3" style="max-width: 540px;">
+                <div style="height: 7rem; margin-left: 1rem" class="card shadow-sm mb-3" style="max-width: 540px;">
                     <div class="row no-gutters col-md-12">
                       <div class="col-md-4">
                         <img src="{{ similar.project.id|get_url }}" class="card-img" alt="...">
                       </div>
                       <div class="col-md-8">
                         <div class="card-body">
-                            <a href="/home/project/{{similar.project.id}}"><h5 style="font-size: 2rem;" class="card-title">{{ similar.project }}</h5></a>
-                            <p class="text-summary">{{similar.project.details|truncatechars:50}}</p>
-                            <p><small class="text-muted">{{similar.project.start_date}}</small></p>
+                            <a href="/home/project/{{similar.project.id}}"><h5 style="font-size: 1rem;" class="card-title">{{ similar.project }}</h5></a>
+                            <!-- <p class="text-summary">{{similar.project.details|truncatechars:50}}</p> -->
+                            <!-- <p><small class="text-muted">{{similar.project.start_date}}</small></p> -->
                         </div>
                       </div>
                     </div>
                   </div>
-            </li>
+            
 
      
             {% endfor %}
@@ -281,6 +287,7 @@
 
         </div>
     </div>
+   </div>
 
 </div>
 
@@ -318,30 +325,31 @@
         }
     });
 
-    $(document).ready(function(){
+    $(document).ready(function () {
         $('.rating span').click(function (e) {
             e.preventDefault();
             let rate = $(this).attr("id").split("rate-")[1];
-            let project_id = {{project.id}};
-            $.ajax({
-                type: "post",
-                dataType: "json",
-                url: '{% url 'rate' %}',
-                data: {'rate': rate, 'project_id': project_id,  csrfmiddlewaretoken: '{{ csrf_token }}'},
-                success: function (data) {
-                    $("span").removeClass("rated");
-                    for(let i = 1; i <= 5; i++){
-                        if(i <= data.rate){
-                            $("#rate-"+i).addClass("rated");
-                        }
+            let project_id = {{ project.id }
+        };
+        $.ajax({
+            type: "post",
+            dataType: "json",
+            url: '{% url 'rate' %}',
+            data: { 'rate': rate, 'project_id': project_id, csrfmiddlewaretoken: '{{ csrf_token }}' },
+            success: function (data) {
+                $("span").removeClass("rated");
+                for (let i = 1; i <= 5; i++) {
+                    if (i <= data.rate) {
+                        $("#rate-" + i).addClass("rated");
                     }
-                    $("#current_rating").html(data.rate)
-                },
-                error: function (data, textStatus, errorThrown) {
-                    console.log(errorThrown);
                 }
-            });
+                $("#current_rating").html(data.rate)
+            },
+            error: function (data, textStatus, errorThrown) {
+                console.log(errorThrown);
+            }
         });
+    });
     });
 </script>
 
