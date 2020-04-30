@@ -108,6 +108,25 @@
 
             <div class="row">
                 <section class="comments">
+
+                    <span style="float: right">
+                        {% if comment.user == user %}
+                        <a class="btn btn-danger ml-1" href="/comments/1/delete">x</a>
+                        {% else %}
+                        {% if not comment.id in reported_comments %}
+                        <form action="{% url 'report_comment' comment.id %}" method="POST">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger ml-1">report</button>
+                        </form>
+                        {% else %}
+                        <button type="submit" class="btn btn-success ml-1" disabled>reported!</button>
+    
+                        {% endif %}
+    
+                        {% endif %}
+    
+                    </span>
+
                     <div class="thumbnail cf">
                       <img src="{{ comment.user.profile_picture.url }}" alt="" />
                     </div>
