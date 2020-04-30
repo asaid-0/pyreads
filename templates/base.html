@@ -64,8 +64,13 @@
         <li class="nav-item"><a href="{% url 'profile' %}" class="nav-link"><i
               class="fa fa-user"></i><span>Profile</span></a></li>
         <li class="nav-item dropdown">
-          <a href="#" data-toggle="dropdown" class="nav-link  user-action"><img
-              src="../..{{ user.profile_picture.url }}" class="avatar" alt="Avatar"> {{user.first_name}}
+          <a href="#" data-toggle="dropdown" class="nav-link  user-action">
+            {% if user.profile_picture %}
+            <img src="../..{{ user.profile_picture.url }}" class="avatar" alt="Avatar"> {{user.first_name}}
+            {% else %}
+            <img src="{{ user.socialaccount_set.all.0.get_avatar_url }}" class="avatar" alt="Avatar">
+            {% endif %}
+             {{user.first_name}}
             {{ user.last_name }} <b class="caret"></b></a>
           <ul class="dropdown-menu">
             <li><a href="{% url 'profile' %}" class="dropdown-item"><i class="fa fa-user-o"></i> Profile</a>
