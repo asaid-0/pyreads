@@ -13,8 +13,27 @@
 <div class="row">
     
     
-    <div id="content" class="col-md-8">
+    <div style="position: relative;" id="content" class="col-md-8">
         <h1 class="project-title mb-5">{{ project.title }}</h1>
+        <div style="position: absolute; top: 1rem; right: 1rem" class="row">
+
+            <div class="rating">
+                {% for n in rateRange reversed%}
+                {% if n <= rate %}
+                <span id="rate-{{n}}" class="rated">☆</span>
+                {% else %}
+                <span id="rate-{{n}}">☆</span>
+                {% endif %}
+                {% endfor %}
+            </div>
+            <span style="position:relative;" id="current_rating">
+                {% if rate %}
+                {{ rate }}
+                {% else %}
+                0
+                {% endif %}
+            </span>
+        </div>
 
         <div id="image-slider" class="carousel slide mb-4" data-ride="carousel">
             <ol class="carousel-indicators">
@@ -44,8 +63,10 @@
                 <span class="sr-only">Next</span>
             </a>
         </div>
+
+        
             <div class="text-secondary">
-                <p class="project-content">{{ project.details }}</p>
+                <p class="project-content">{{ project.details|safe }}</p>
             </div>
 
             <div class="p-2 text-secondary fa fa-comments"> comments</div>
@@ -168,6 +189,8 @@
               </div>
             </div>
           </div>
+
+
 
 
 
@@ -325,31 +348,30 @@
         }
     });
 
-    $(document).ready(function () {
+    $(document).ready(function(){
         $('.rating span').click(function (e) {
             e.preventDefault();
             let rate = $(this).attr("id").split("rate-")[1];
-            let project_id = {{ project.id }
-        };
-        $.ajax({
-            type: "post",
-            dataType: "json",
-            url: '{% url 'rate' %}',
-            data: { 'rate': rate, 'project_id': project_id, csrfmiddlewaretoken: '{{ csrf_token }}' },
-            success: function (data) {
-                $("span").removeClass("rated");
-                for (let i = 1; i <= 5; i++) {
-                    if (i <= data.rate) {
-                        $("#rate-" + i).addClass("rated");
+            let project_id = {{project.id}};
+            $.ajax({
+                type: "post",
+                dataType: "json",
+                url: '{% url 'rate' %}',
+                data: {'rate': rate, 'project_id': project_id,  csrfmiddlewaretoken: '{{ csrf_token }}'},
+                success: function (data) {
+                    $("span").removeClass("rated");
+                    for(let i = 1; i <= 5; i++){
+                        if(i <= data.rate){
+                            $("#rate-"+i).addClass("rated");
+                        }
                     }
+                    $("#current_rating").html(data.rate)
+                },
+                error: function (data, textStatus, errorThrown) {
+                    console.log(errorThrown);
                 }
-                $("#current_rating").html(data.rate)
-            },
-            error: function (data, textStatus, errorThrown) {
-                console.log(errorThrown);
-            }
+            });
         });
-    });
     });
 </script>
 

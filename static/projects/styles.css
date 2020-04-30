@@ -184,13 +184,14 @@
 
 .rating {
     direction: rtl;
-    font-size: 2em;
+    font-size: 1.3em;
+    margin-right: 0.5rem;
 }
 
 .rating>span {
     display: inline-block;
     position: relative;
-    width: 1.1em;
+    /* width: 1.1em; */
 }
 
 .rating>span:hover:before,

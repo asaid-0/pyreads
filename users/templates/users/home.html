@@ -45,7 +45,7 @@
           <h2 class="display-4"> {{project.title}} </h2>
           <p class="lead">
             {% autoescape off %}
-            {{ project.details |truncatechars:150  }}
+            {{ project.details|truncatechars:150|striptags  }}
             {% endautoescape %}
           </p>
         </div>
@@ -92,7 +92,7 @@
           <!-- <div class="card-body"> -->
           <p class="card-text">
             {% autoescape off %}
-            {{ project.details |truncatechars:150  }}
+            {{ project.details|truncatechars:150|striptags  }}
             {% endautoescape %}
           </p>
           <hr>
@@ -150,7 +150,7 @@
 
           <p class="card-text">
             {% autoescape off %}
-            {{ project.details |truncatechars:150 }}
+            {{ project.details|truncatechars:150|striptags }}
             {% endautoescape %}
           </p>
           <hr>

@@ -12,16 +12,6 @@
     background-color: #7289da;
 }
 
-.carousel-item {
-    height: 70vh;
-    min-height: 350px;
-    background: no-repeat center center scroll;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-  }
-
 .container-fluid {
     padding: 0px;
 }
@@ -48,10 +38,7 @@
         text-decoration: none;
         color: #7289da;
 }
-.carousel-control-prev, .carousel-control-next {
-    height: 70vh;
-    margin-top: 100px !important;
-}
+
 .container {
     margin-top: 30px !important;
 }
