@@ -112,13 +112,15 @@
                                 </div>
                             </div>
                             <hr>
+                            {% if not user.socialaccount_set.all.0.uid %} 
                             <div class="row">
                                 <div class="col-md-6">
                                     <i class="fa fa-key"></i>
                                     <a href="{% url 'change_password' %}" class="">Change password</a>
                                 </div>
                             </div>
-                    </div>
+                            {% endif %}
+                            </div>
                 </div>
             </div>
         </div>
@@ -132,6 +134,8 @@
         </div>
     </div>
 </div>
+{% if not user.socialaccount_set.all.0.uid %} 
 <a href="{% url 'delete_account' %}" class="btn btn-danger profile-delete-btn"> Delete account</a>
+{% endif %}
 
 {% endblock %}
