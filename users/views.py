@@ -29,7 +29,7 @@ def home(request):
     }
     return render(request, "users/home.html", context)
 
-@login_required
+@login_required(login_url='/accounts/login/')
 def get_categories(request):
     categories = Category.objects.all()
     context = {
@@ -39,7 +39,7 @@ def get_categories(request):
 
 
 
-@login_required
+@login_required(login_url='/accounts/login/')
 def show_profile(request):
     current_user = request.user
     password_form = ConfirmPasswordForm()
@@ -47,7 +47,7 @@ def show_profile(request):
     return render(request, "users/user_profile.html", context)
 
 
-@login_required
+@login_required(login_url='/accounts/login/')
 def edit_profile(request):
     current_user = request.user
     if request.method == "POST":
@@ -89,7 +89,7 @@ def change_password(request):
     return render(request, "users/change_password.html", {"form": form})
 
 
-@login_required
+@login_required(login_url='/accounts/login/')
 def get_projects(request):
     current_user = request.user
     user = User.objects.get(id=current_user.id)
@@ -101,7 +101,7 @@ def get_projects(request):
     return render(request, "users/user_projects.html", context)
 
 
-@login_required
+@login_required(login_url='/accounts/login/')
 def get_donations(request):
     current_user = request.user
     user = User.objects.get(id=current_user.id)
